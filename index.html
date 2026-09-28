@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ilm Quest — Islamitische Trivia</title>
+<style>
+:root{
+  --bg:#FAF5E9; --card:#FFFFFF; --card2:#F3EDDD; --ink:#20312B; --sub:#6E7D74;
+  --green:#0B4A38; --green2:#0E6A50; --pine:#072E23; --mint:#DFF2E8;
+  --gold:#C9A227; --gold2:#EBCB6E; --red:#C34A3A; --line:#E7DFCB;
+  --shadow:0 6px 20px rgba(11,74,56,.10);
+}
+[data-theme="dark"]{
+  --bg:#0A1512; --card:#122119; --card2:#0F1C15; --ink:#F1EADA; --sub:#93A79B;
+  --green:#2FA982; --green2:#3BC496; --pine:#08312a; --mint:#123227;
+  --gold:#D9B44A; --gold2:#EBCB6E; --red:#E06A57; --line:#1E332A;
+  --shadow:0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.45;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%230B4A38' stroke-opacity='0.07'%3E%3Cpath d='M42 6l8 20 20 8-20 8-8 20-8-20-20-8 20-8z'/%3E%3C/g%3E%3C/svg%3E");
+}
+h1,h2,h3,.serif{font-family:Georgia,"Palatino Linotype",Palatino,serif;letter-spacing:.2px}
+#wrap{max-width:470px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative}
+#app{flex:1;padding:16px 16px 88px;animation:fade .28s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.eyebrow{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sub)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.card+.card{margin-top:12px}
+.row{display:flex;align-items:center;gap:10px}
+.spread{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--mint);color:var(--green);
+  border-radius:999px;padding:6px 11px;font-weight:700;font-size:13px}
+.chip.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3d2f05}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:none;cursor:pointer;
+  border-radius:15px;padding:14px 16px;font-size:16px;font-weight:800;font-family:inherit;color:#fff;
+  background:linear-gradient(135deg,var(--green2),var(--green));box-shadow:var(--shadow);transition:transform .08s}
+.btn:active{transform:scale(.97)}
+.btn.gold{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2d05}
+.btn.ghost{background:var(--card);color:var(--green);border:1.5px solid var(--line);box-shadow:none}
+.btn.small{padding:10px 12px;font-size:14px;border-radius:12px;width:auto}
+.btn:disabled{opacity:.5}
+.lockbadge{font-size:11px;font-weight:700;color:var(--sub)}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.avatar{width:46px;height:46px;border-radius:50%;background:var(--mint);display:flex;align-items:center;justify-content:center;
+  font-size:24px;border:2px solid var(--gold);cursor:pointer}
+.lvlring{position:relative;width:46px;height:46px}
+.xpwrap{background:var(--card2);border-radius:999px;height:12px;overflow:hidden;border:1px solid var(--line)}
+.xpfill{height:100%;background:linear-gradient(90deg,var(--gold2),var(--gold));border-radius:999px;transition:width .6s ease}
+.hero{background:linear-gradient(150deg,var(--pine),var(--green) 70%,var(--green2));color:#F6F1E2;border:none}
+.hero .eyebrow{color:#CBB877}
+.hero h1{font-size:24px;line-height:1.15}
+.orn{color:var(--gold2);font-family:Georgia,serif}
+
+/* mode & category tiles */
+.tile{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px;cursor:pointer;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;transition:transform .08s;position:relative}
+.tile:active{transform:scale(.97)}
+.tile .ic{font-size:24px}
+.tile b{font-size:14px;line-height:1.2}
+.tile small{color:var(--sub);font-size:11.5px;line-height:1.3}
+.tile.locked{opacity:.55}
+.miniprog{height:5px;background:var(--card2);border-radius:99px;overflow:hidden;margin-top:2px}
+.miniprog i{display:block;height:100%;background:var(--green2);border-radius:99px}
+
+/* quiz */
+.qmeta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 18px;box-shadow:var(--shadow)}
+.qcard h2{font-size:19px;line-height:1.35}
+.qcard.bonus{border:2px solid var(--gold);box-shadow:0 0 0 4px rgba(201,162,39,.15)}
+.bonusbar{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#3a2d05;border-radius:12px;
+  padding:8px 12px;font-weight:800;font-size:13px;margin-bottom:10px;text-align:center;animation:pop .4s}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.opt{border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:13px 14px;
+  font-size:15.5px;font-weight:600;text-align:left;cursor:pointer;font-family:inherit;transition:transform .07s;display:flex;gap:10px;align-items:center}
+.opt .abc{min-width:26px;height:26px;border-radius:8px;background:var(--mint);color:var(--green);
+  display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex:none}
+.opt:active{transform:scale(.98)}
+.opt.ok{border-color:var(--green2);background:var(--mint);animation:pop .35s}
+.opt.ok .abc{background:var(--green2);color:#fff}
+.opt.bad{border-color:var(--red);background:rgba(195,74,58,.10)}
+.opt.bad .abc{background:var(--red);color:#fff}
+.opt.dim{opacity:.5}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.03)}100%{transform:scale(1)}}
+.timerbar{height:8px;border-radius:99px;background:var(--card2);overflow:hidden;margin:0 0 12px;border:1px solid var(--line)}
+.timerbar i{display:block;height:100%;background:linear-gradient(90deg,var(--green2),var(--gold));transition:width .1s linear}
+.explain{margin-top:14px;border-radius:16px;background:var(--card2);border:1px solid var(--line);padding:14px;animation:fade .3s}
+.explain .src{margin-top:10px;font-size:13.5px;background:var(--card);border:1px dashed var(--gold);border-radius:12px;padding:9px 11px}
+.explain .madh{margin-top:8px;font-size:13.5px;background:var(--mint);border-radius:12px;padding:9px 11px;color:var(--ink)}
+.turnbanner{background:linear-gradient(135deg,var(--pine),var(--green));color:#F6F1E2;border-radius:18px;padding:26px 18px;text-align:center}
+.lives{font-size:18px;letter-spacing:2px}
+
+/* results */
+.stars{font-size:42px;text-align:center;letter-spacing:6px;margin:6px 0}
+.bigxp{font-size:40px;font-weight:800;text-align:center;color:var(--green);font-family:Georgia,serif}
+.rewrow{display:flex;justify-content:space-between;padding:9px 4px;border-bottom:1px dashed var(--line);font-size:14.5px}
+.rewrow:last-child{border:none}
+
+/* badges */
+.badge{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.badge .bic{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--gold2),var(--gold));
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.badge.locked{opacity:.45}
+.badge.locked .bic{background:var(--card2);filter:grayscale(1)}
+
+/* profile */
+.catbar{margin:8px 0}
+.catbar .spread{font-size:13px;margin-bottom:3px}
+.avpick{display:flex;flex-wrap:wrap;gap:8px}
+.av{width:44px;height:44px;border-radius:12px;background:var(--card2);border:2px solid transparent;font-size:22px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer}
+.av.sel{border-color:var(--gold);background:var(--mint)}
+.av.lockedav{opacity:.35}
+
+/* leaderboard */
+.lbrow{display:flex;align-items:center;gap:10px;padding:10px 6px;border-bottom:1px solid var(--line);font-size:14.5px}
+.lbrow:last-child{border:none}
+.lbrow .rank{width:30px;font-weight:800;color:var(--sub)}
+.lbrow.me{background:var(--mint);border-radius:12px}
+
+/* wheel */
+.wheelwrap{position:relative;width:270px;height:270px;margin:14px auto}
+.wheel{width:100%;height:100%;border-radius:50%;border:8px solid var(--gold);position:relative;
+  transition:transform 4.2s cubic-bezier(.12,.75,.18,1);
+  background:conic-gradient(var(--green) 0 45deg,var(--card2) 45deg 90deg,var(--green2) 90deg 135deg,var(--gold2) 135deg 180deg,
+  var(--green) 180deg 225deg,var(--card2) 225deg 270deg,var(--green2) 270deg 315deg,var(--gold2) 315deg 360deg)}
+.wl{position:absolute;left:50%;top:50%;font-size:17px;transform-origin:0 0}
+.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:28px;z-index:2;color:var(--red)}
+.hub{position:absolute;inset:0;margin:auto;width:56px;height:56px;border-radius:50%;background:var(--card);
+  border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px}
+
+/* nav */
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:470px;
+  background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);display:flex;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:20}
+nav button{flex:1;background:none;border:none;font-family:inherit;color:var(--sub);font-size:10.5px;font-weight:700;
+  display:flex;flex-direction:column;gap:2px;align-items:center;cursor:pointer;padding:4px 0}
+nav button span{font-size:21px}
+nav button.on{color:var(--green)}
+
+/* modal & toast */
+.overlay{position:fixed;inset:0;background:rgba(7,30,24,.55);display:flex;align-items:center;justify-content:center;
+  z-index:50;padding:20px;animation:fade .2s}
+.modal{background:var(--card);border-radius:22px;padding:20px;width:100%;max-width:400px;max-height:86dvh;overflow:auto;border:1px solid var(--line)}
+input[type=text]{width:100%;padding:12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card2);
+  color:var(--ink);font-size:16px;font-family:inherit}
+.switchrow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-weight:600;font-size:15px}
+.sw{width:48px;height:28px;border-radius:99px;background:var(--card2);border:1px solid var(--line);position:relative;cursor:pointer;flex:none}
+.sw i{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:var(--sub);transition:all .2s}
+.sw.on{background:var(--green2)}
+.sw.on i{left:23px;background:#fff}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;background:var(--pine);color:#F6F1E2;
+  padding:11px 18px;border-radius:99px;font-weight:700;font-size:14px;z-index:60;opacity:0;pointer-events:none;transition:opacity .25s;max-width:88%;text-align:center}
+#toast.show{opacity:1}
+.confetti{position:fixed;top:-12px;font-size:16px;z-index:70;pointer-events:none;animation:cfall 1.5s ease-in forwards}
+@keyframes cfall{to{transform:translateY(105dvh) rotate(540deg);opacity:.2}}
+.shake{animation:shake .5s}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.center{text-align:center}
+.mt{margin-top:12px}.mt8{margin-top:8px}
+.sub{color:var(--sub);font-size:13px}
+.hr{border-top:1px solid var(--line);margin:12px 0}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="app"><div class="card center" style="margin-top:40vh">🕌 Laden…</div></div>
+  <nav id="nav" style="display:none">
+    <button onclick="go('home')" id="nb-home"><span>🏠</span>Home</button>
+    <button onclick="go('cats')" id="nb-cats"><span>🗂️</span>Categorieën</button>
+    <button onclick="go('lb')" id="nb-lb"><span>🏆</span>Ranglijst</button>
+    <button onclick="go('badges')" id="nb-badges"><span>🎖️</span>Badges</button>
+    <button onclick="go('profile')" id="nb-profile"><span>👤</span>Profiel</button>
+  </nav>
+</div>
+<div id="toast"></div>
+<div id="modalhost"></div>
+<script>
+"use strict";
+/* ================= DATA ================= */
+const CATS={
+ quran:{n:"Qur'an",i:"📖"}, tafsir:{n:"Tafsir",i:"🔍"}, hadith:{n:"Hadith",i:"📜"}, aqidah:{n:"'Aqidah",i:"💠"},
+ fiqh:{n:"Fiqh",i:"⚖️"}, taharah:{n:"Taharah",i:"💧"}, salah:{n:"Salah",i:"🕌"}, zakah:{n:"Zakah",i:"🤲"},
+ ramadan:{n:"Ramadan & vasten",i:"🌙"}, hajj:{n:"Hajj & 'Umrah",i:"🕋"}, profeten:{n:"Profeten",i:"✨"},
+ sirah:{n:"Leven v.d. Profeet ﷺ",i:"🌹"}, sahabah:{n:"Sahabah",i:"🤝"}, geschiedenis:{n:"Islamitische geschiedenis",i:"🏰"},
+ scholen:{n:"De vier wetscholen",i:"🏛️"}, arabisch:{n:"Arabische begrippen",i:"🔤"}, dua:{n:"Du'a & adhkar",i:"📿"},
+ adab:{n:"Adab & etiquette",i:"🌸"}, geleerden:{n:"Moslimgeleerden",i:"🎓"}, algemeen:{n:"Algemene kennis",i:"🧠"}
+};
+const DIFFS={1:{n:"Beginner",i:"🌱"},2:{n:"Gemiddeld",i:"🌿"},3:{n:"Gevorderd",i:"🌳"},4:{n:"Expert",i:"🏔️"}};
+const DIFF_LVL={1:1,2:3,3:6,4:10};
+const AVATARS=["🙂","🌙","⭐","🕌","📖","📿","🕋","🐪","🌴","🏮","🦉","🎓","🧭","🌟","🍵","🕯️"];
+const START_AV=["🙂","🌙","⭐"];
+
+/* Vragen: a[0] is ALTIJD het juiste antwoord (wordt in de app geschud).
+   e=uitleg, s=bron, m=verschillen tussen de wetscholen (optioneel). */
+const QUESTIONS=[
+/* --- QUR'AN --- */
+{c:"quran",d:1,q:"Hoeveel soera's telt de Qur'an?",a:["114","99","120","110"],e:"De Qur'an bestaat uit 114 soera's, van al-Fatihah tot an-Nas.",s:"Consensus (idjma')"},
+{c:"quran",d:1,q:"Wat is de langste soera van de Qur'an?",a:["Al-Baqarah","Al-'Imran","An-Nisa'","Al-Kahf"],e:"Soera al-Baqarah telt 286 verzen en is daarmee de langste soera.",s:"Qur'an"},
+{c:"quran",d:2,q:"Welke soera begint níét met 'Bismillah'?",a:["At-Tawbah","Al-Anfal","Yunus","Al-Ma'idah"],e:"Soera 9 (at-Tawbah) is de enige soera zonder basmala aan het begin.",s:"Qur'an; consensus van de geleerden"},
+{c:"quran",d:2,q:"In welke soera staat Ayat al-Kursi?",a:["Al-Baqarah","An-Nur","Ya-Sin","Al-Mulk"],e:"Ayat al-Kursi is vers 255 van al-Baqarah. De Profeet ﷺ noemde het het geweldigste vers.",s:"Qur'an 2:255; Sahih Muslim"},
+{c:"quran",d:2,q:"Welke verzen werden als eerste geopenbaard?",a:["Al-'Alaq 1-5 (Iqra')","Al-Fatihah","Al-Ikhlas","An-Nas"],e:"In de grot Hira' daalde Djibril neer met 'Iqra'!' — de eerste vijf verzen van soera al-'Alaq.",s:"Sahih al-Bukhari (hadith van 'A'ishah)"},
+{c:"quran",d:3,q:"Welke soera staat volgens de Profeet ﷺ gelijk aan een derde van de Qur'an?",a:["Al-Ikhlas","Al-Fatihah","Al-Kawthar","Al-Falaq"],e:"Soera al-Ikhlas vat de zuivere eenheid van Allah samen en staat gelijk aan een derde van de Qur'an.",s:"Sahih al-Bukhari"},
+{c:"quran",d:3,q:"Welke profeet wordt het vaakst bij naam genoemd in de Qur'an?",a:["Musa","'Isa","Ibrahim","Nuh"],e:"Musa (vrede zij met hem) wordt ruim 130 keer genoemd — vaker dan elke andere profeet.",s:"Telling van de Qur'antekst"},
+{c:"quran",d:4,q:"Wat is het langste vers van de Qur'an?",a:["Het 'schuldvers' (2:282)","Ayat al-Kursi (2:255)","Ayat an-Nur (24:35)","Het laatste vers van al-Baqarah"],e:"Ayat ad-dayn, over het correct vastleggen van schulden, is het langste vers.",s:"Qur'an 2:282"},
+
+/* --- TAFSIR --- */
+{c:"tafsir",d:1,q:"Wat betekent 'tafsir'?",a:["Uitleg van de Qur'an","Recitatiekunst","Kalligrafie","Vertaling naar het Arabisch"],e:"Tafsir is de wetenschap die de betekenissen van de Qur'an uitlegt.",s:"Taalkundige en klassieke definitie"},
+{c:"tafsir",d:2,q:"Welke metgezel staat bekend als 'de vertolker van de Qur'an'?",a:["Ibn 'Abbas","Abu Hurairah","Anas ibn Malik","Bilal"],e:"De Profeet ﷺ deed du'a voor Ibn 'Abbas: 'O Allah, geef hem begrip van de religie.'",s:"Sahih al-Bukhari"},
+{c:"tafsir",d:2,q:"Wat betekent 'asbab an-nuzul'?",a:["De aanleidingen van openbaring","De volgorde van de soera's","De recitatieregels","De afschaffing van verzen"],e:"Asbab an-nuzul beschrijft bij welke gebeurtenis of vraag een vers werd geopenbaard.",s:"Klassieke Qur'anwetenschappen ('ulum al-Qur'an)"},
+{c:"tafsir",d:3,q:"Wie schreef de beroemde klassieke tafsir 'Djami' al-bayan'?",a:["At-Tabari","Ibn Kathir","Al-Qurtubi","As-Suyuti"],e:"Imam at-Tabari (overleden 310 H) schreef een van de vroegste, meest complete tafsirs.",s:"Klassieke tafsirliteratuur"},
+{c:"tafsir",d:3,q:"Waarop baseert de tafsir van Ibn Kathir zich vooral?",a:["Qur'an, hadith en uitspraken van de sahabah","Filosofie","Dromen","Poëzie"],e:"Dit heet tafsir bi-l-ma'thur: de Qur'an uitleggen met de Qur'an, de Sunnah en de sahabah.",s:"Tafsir Ibn Kathir (methode)"},
+{c:"tafsir",d:4,q:"Waar gaat 'an-nasikh wa-l-mansukh' over?",a:["Abrogerende en geabrogeerde verzen","Mekkaanse en Medinese soera's","De zeven recitatiewijzen","Handschriften van de Qur'an"],e:"Deze wetenschap bestudeert welke eerdere regelgeving door latere openbaring is vervangen.",s:"'Ulum al-Qur'an"},
+
+/* --- HADITH --- */
+{c:"hadith",d:1,q:"Wat betekent 'sahih' bij een hadith?",a:["Authentiek","Zwak","Verzonnen","Onbekend"],e:"Een sahih hadith voldoet aan strenge eisen van keten en tekst en is betrouwbaar.",s:"Hadithwetenschap (mustalah al-hadith)"},
+{c:"hadith",d:1,q:"Wie stelde Sahih al-Bukhari samen?",a:["Imam al-Bukhari","Imam Muslim","Imam Malik","Imam Ahmad"],e:"Muhammad ibn Isma'il al-Bukhari (overleden 256 H) selecteerde ± 7000 overleveringen uit honderdduizenden.",s:"Biografieën van de hadithgeleerden"},
+{c:"hadith",d:2,q:"Welke twee verzamelingen heten samen 'as-Sahihayn'?",a:["Bukhari & Muslim","Tirmidhi & Nasa'i","Abu Dawud & Ibn Majah","Muwatta' & Musnad"],e:"Sahih al-Bukhari en Sahih Muslim gelden als de meest authentieke boeken na de Qur'an.",s:"Consensus van de hadithgeleerden"},
+{c:"hadith",d:2,q:"Met welke beroemde hadith opent Sahih al-Bukhari?",a:["'Daden zijn slechts volgens de intenties'","'De religie is oprechtheid'","'De sterke gelovige is beter…'","'Glimlachen is sadaqah'"],e:"'Innama l-a'malu bi-n-niyyat' — alles draait om je intentie voor Allah.",s:"Sahih al-Bukhari, hadith nr. 1"},
+{c:"hadith",d:3,q:"Wat is de 'isnad' van een hadith?",a:["De keten van overleveraars","De tekst van de hadith","De titel","De uitleg"],e:"Isnad = de keten; matn = de tekst. Beide worden gecontroleerd op betrouwbaarheid.",s:"Hadithwetenschap"},
+{c:"hadith",d:3,q:"Welke metgezel heeft de meeste ahadith overgeleverd?",a:["Abu Hurairah","'A'ishah","Ibn 'Umar","Anas ibn Malik"],e:"Abu Hurairah leverde ruim 5000 overleveringen over; hij week jarenlang niet van de zijde van de Profeet ﷺ.",s:"Hadithliteratuur"},
+{c:"hadith",d:4,q:"Wat is een 'mutawatir' overlevering?",a:["Via zó veel ketens overgeleverd dat een leugen uitgesloten is","Met slechts één overleveraar per generatie","Een hadith zonder keten","Alleen in Bukhari te vinden"],e:"Mutawatir geeft zekere kennis; het tegenovergestelde van een ahad-overlevering.",s:"Hadithwetenschap"},
+
+/* --- 'AQIDAH --- */
+{c:"aqidah",d:1,q:"Hoeveel zuilen van iman (geloof) zijn er?",a:["6","5","4","7"],e:"Geloof in Allah, Zijn engelen, Zijn boeken, Zijn boodschappers, de Laatste Dag en de voorbeschikking.",s:"Sahih Muslim (hadith van Djibril)"},
+{c:"aqidah",d:1,q:"Wat betekent 'tawhid'?",a:["De eenheid van Allah","Het gebed","De bedevaart","Liefdadigheid"],e:"Tawhid: Allah als enige aanbidden en Hem als enige Schepper en Heer erkennen.",s:"Qur'an, o.a. soera al-Ikhlas"},
+{c:"aqidah",d:2,q:"Welke engel bracht de openbaring aan de profeten?",a:["Djibril","Mika'il","Israfil","Malik"],e:"Djibril (Gabriël) daalde met de openbaring neer op het hart van de Profeet ﷺ.",s:"Qur'an 2:97"},
+{c:"aqidah",d:2,q:"Welke zonde vergeeft Allah niet als iemand er zonder berouw op sterft?",a:["Shirk (deelgenoten toekennen)","Liegen","Roddelen","Gierigheid"],e:"Allah vergeeft niet dat aan Hem deelgenoten worden toegekend, maar vergeeft wat daarbuiten valt voor wie Hij wil.",s:"Qur'an 4:48"},
+{c:"aqidah",d:3,q:"Wat betekent geloven in 'al-qadar'?",a:["Geloven in de voorbeschikking, het goede én het moeilijke ervan","Geloven in geluk","Sterrenwichelarij","Niets doen en afwachten"],e:"Qadar is de zesde zuil van iman; het sluit eigen inspanning en verantwoordelijkheid niet uit.",s:"Sahih Muslim (hadith van Djibril)"},
+{c:"aqidah",d:3,q:"Hoeveel Schone Namen van Allah noemt de bekende hadith?",a:["99","100","50","199"],e:"'Allah heeft 99 namen; wie ze kent, treedt het Paradijs binnen.' Zijn namen zijn overigens niet tot 99 beperkt.",s:"Sahih al-Bukhari & Sahih Muslim"},
+{c:"aqidah",d:4,q:"Wat zegt Ahl as-Sunnah over de Qur'an?",a:["Het is de Spraak van Allah (kalamullah)","Hij is geschapen","Het is mensenwerk","Alleen de betekenis komt van Allah"],e:"Dit standpunt werd o.a. door Imam Ahmad ibn Hanbal standvastig verdedigd tijdens de mihna.",s:"Klassieke 'aqidah-werken van Ahl as-Sunnah"},
+
+/* --- FIQH --- */
+{c:"fiqh",d:1,q:"Wat betekent 'fiqh' letterlijk?",a:["Diep begrip","Straf","Boek","Traditie"],e:"Fiqh is het begrijpen van de praktische regels van de islam uit Qur'an en Sunnah.",s:"Taalkundige en klassieke definitie"},
+{c:"fiqh",d:2,q:"Wat is 'idjma''?",a:["Consensus van de geleerden","Analogie","Gewoonterecht","De mening van één geleerde"],e:"Idjma' is de overeenstemming van de geleerden van de ummah over een oordeel — een sterke bron in de fiqh.",s:"Usul al-fiqh (alle vier de scholen)"},
+{c:"fiqh",d:2,q:"Wat is 'qiyas'?",a:["Analogische afleiding","Consensus","Een overlevering","Een fatwa"],e:"Qiyas: een nieuw geval beoordelen naar een bestaand oordeel met dezelfde onderliggende reden ('illah).",s:"Usul al-fiqh"},
+{c:"fiqh",d:3,q:"Wat zijn de vijf hoofdcategorieën van handelingen in de fiqh?",a:["Verplicht, aanbevolen, toegestaan, afgeraden, verboden","Alleen halal en haram","Groot en klein","Fard, sunnah en bid'ah"],e:"Fard/wadjib, mustahabb, mubah, makruh en haram — elke handeling valt in één van deze vijf.",s:"Usul al-fiqh"},
+{c:"fiqh",d:3,q:"Wat is 'fard kifayah'?",a:["Gemeenschapsplicht: vervuld door genoeg mensen, dan vervalt hij voor de rest","Individuele plicht voor iedereen","Een vrijwillige daad","Een verboden daad"],e:"Voorbeeld: het djanazah-gebed. Doet niemand het, dan is de hele gemeenschap aansprakelijk.",s:"Usul al-fiqh"},
+{c:"fiqh",d:4,q:"Welke wetschool maakt een strikt onderscheid tussen 'fard' en 'wadjib'?",a:["Hanafi","Maliki","Shafi'i","Hanbali"],e:"Bij de Hanafi's berust fard op absoluut zeker bewijs en wadjib op iets minder stellig bewijs (zoals witr).",s:"Klassieke usul-werken",m:"Hanafi: fard ≠ wadjib (verschillend bewijsniveau). Maliki, Shafi'i en Hanbali gebruiken beide termen grotendeels als synoniemen."},
+
+/* --- TAHARAH --- */
+{c:"taharah",d:1,q:"Wat is 'wudu'?",a:["De kleine rituele wassing","De grote wassing","Droge reiniging met aarde","Tanden poetsen"],e:"Wudu is de rituele wassing die o.a. vereist is voor het gebed.",s:"Qur'an 5:6"},
+{c:"taharah",d:1,q:"Hoe vaak is het sunnah om elk lichaamsdeel bij wudu te wassen?",a:["3 keer","1 keer","5 keer","7 keer"],e:"Eén keer is verplicht; de Profeet ﷺ deed één, twee en drie keer voor — drie is de volmaakte sunnah.",s:"Sahih al-Bukhari"},
+{c:"taharah",d:2,q:"Wat doe je als er geen water is (of water schadelijk is)?",a:["Tayammum met schone aarde","Het gebed overslaan","Wachten tot er water is","Dubbel wassen achteraf"],e:"Tayammum: intentie, de handen op schone aarde slaan en gezicht en handen afvegen.",s:"Qur'an 5:6"},
+{c:"taharah",d:2,q:"Wanneer is ghusl (grote wassing) o.a. verplicht?",a:["Na djanabah (grote onreinheid)","Na het eten","Vóór elk gebed","Na het slapen"],e:"Ghusl is o.a. verplicht na geslachtsgemeenschap en na de menstruatie.",s:"Qur'an 5:6; Sahih al-Bukhari & Muslim"},
+{c:"taharah",d:3,q:"Hoeveel verplichte (fard) handelingen van wudu noemt vers 5:6 expliciet?",a:["4","6","7","3"],e:"Gezicht wassen, armen t/m de ellebogen, over het hoofd vegen en voeten t/m de enkels.",s:"Qur'an 5:6",m:"Hanafi: precies deze 4. Shafi'i: 6 (ook intentie en volgorde). Maliki: o.a. ook intentie, inwrijven (dalk) en aaneensluiting. Hanbali: o.a. ook volgorde, aaneensluiting en mond/neus spoelen."},
+{c:"taharah",d:4,q:"Verbreekt vloeiend bloed uit een wond de wudu?",a:["Verschil: Hanafi ja (en Hanbali bij veel bloed); Shafi'i en Maliki nee","Alle scholen: ja","Alle scholen: nee","Alleen op vrijdag"],e:"Een klassiek meningsverschil, gebaseerd op verschillende overleveringen en principes.",s:"Fiqh-werken van de vier scholen",m:"Hanafi: vloeiend bloed verbreekt de wudu. Hanbali: veel (onrein) bloed verbreekt. Shafi'i & Maliki: bloed uit een wond verbreekt de wudu niet."},
+
+/* --- SALAH --- */
+{c:"salah",d:1,q:"Hoeveel verplichte gebeden zijn er per etmaal?",a:["5","3","4","7"],e:"Fadjr, Dhuhr, 'Asr, Maghrib en 'Isha — voorgeschreven tijdens de Mi'radj.",s:"Sahih al-Bukhari & Muslim"},
+{c:"salah",d:1,q:"Hoeveel raka'at telt het fard van Maghrib?",a:["3","2","4","1"],e:"Maghrib is het enige verplichte gebed met drie raka'at.",s:"Overgeleverde praktijk (mutawatir)"},
+{c:"salah",d:2,q:"Welk gebed vervangt Dhuhr op vrijdag voor wie het bijwoont?",a:["Djumu'ah (het vrijdaggebed)","'Asr","Duha","'Id"],e:"Het vrijdaggebed bestaat uit een preek (khutbah) en twee raka'at.",s:"Qur'an 62:9; Sahih al-Bukhari & Muslim"},
+{c:"salah",d:2,q:"In welke richting bidden moslims?",a:["Naar de Ka'bah in Makkah","Naar Jeruzalem","Naar het oosten","Naar Madinah"],e:"Eerst was de qiblah Bayt al-Maqdis; daarna beval Allah de richting van de Ka'bah.",s:"Qur'an 2:144"},
+{c:"salah",d:3,q:"Wat is het oordeel over het witr-gebed?",a:["Hanafi: wadjib; de andere scholen: sterk aanbevolen sunnah","Bij alle scholen fard","Bij alle scholen geheel vrijwillig zonder nadruk","Alleen in Ramadan voorgeschreven"],e:"Alle scholen benadrukken witr; de Hanafi's noemen het zelfs wadjib.",s:"Fiqh-werken van de vier scholen",m:"Hanafi: wadjib. Maliki, Shafi'i, Hanbali: sunnah mu'akkadah (sterk benadrukt)."},
+{c:"salah",d:3,q:"Welke school staat bekend om 'sadl' (armen langs het lichaam) in het fard-gebed?",a:["Maliki","Hanafi","Shafi'i","Hanbali"],e:"Binnen de Maliki-school is sadl in het verplichte gebed de bekende praktijk; de andere scholen vouwen de handen.",s:"Fiqh-werken van de vier scholen",m:"Maliki (bekende positie): armen langs het lichaam in het fard-gebed. Hanafi/Shafi'i/Hanbali: handen gevouwen (met onderlinge verschillen over de plaats)."},
+{c:"salah",d:4,q:"Welke scholen bevelen qunut in het Fadjr-gebed aan?",a:["Shafi'i (na de ruku') en Maliki (zachtjes, vóór de ruku')","Hanafi en Hanbali","Alle vier de scholen","Geen enkele school"],e:"Hanafi en Hanbali plaatsen de qunut juist in het witr-gebed (behalve bij rampen: qunut an-nazilah).",s:"Fiqh-werken van de vier scholen",m:"Shafi'i: sunnah in Fadjr, na de ruku'. Maliki: aanbevolen, stil, vóór de ruku'. Hanafi & Hanbali: qunut hoort bij witr, niet standaard bij Fadjr."},
+
+/* --- ZAKAH --- */
+{c:"zakah",d:1,q:"Hoeveel procent zakat betaal je over spaargeld en goud (na een jaar boven de nisab)?",a:["2,5%","10%","5%","1%"],e:"Een kwart van een tiende (rub' al-'ushr) = 2,5% per maanjaar.",s:"Sahih al-Bukhari; consensus"},
+{c:"zakah",d:2,q:"Wat is de 'nisab'?",a:["Het minimumvermogen waarboven zakat verplicht wordt","Het zakatpercentage","De ontvanger van zakat","De maand van betaling"],e:"Pas als je vermogen een maanjaar boven de nisab blijft, ben je zakatplichtig.",s:"Fiqh-werken; overleveringen in de Sunan"},
+{c:"zakah",d:2,q:"Hoeveel groepen zakat-ontvangers noemt de Qur'an?",a:["8","5","10","3"],e:"O.a. de armen, de behoeftigen, de zakatwerkers, mensen met schulden en de reiziger.",s:"Qur'an 9:60"},
+{c:"zakah",d:3,q:"Wanneer moet zakat al-fitr uiterlijk betaald zijn?",a:["Vóór het 'Id-gebed","Na het 'Id-gebed","In Sha'ban","Tijdens de hadj"],e:"De Profeet ﷺ beval dat zij gegeven wordt voordat de mensen naar het gebed gaan.",s:"Sahih al-Bukhari (Ibn 'Umar)",m:"Hanafi: de waarde in geld geven is toegestaan. Maliki, Shafi'i, Hanbali: voorkeur/vereiste is voedsel (een sa')."},
+{c:"zakah",d:4,q:"Wat is de nisab van goud?",a:["± 85 gram (20 dinar)","± 10 gram","± 500 gram","1 kilogram"],e:"20 mithqal/dinar goud; voor zilver geldt 200 dirham (± 595 gram).",s:"Sunan-werken; fiqh van de vier scholen"},
+
+/* --- RAMADAN --- */
+{c:"ramadan",d:1,q:"In welke maand werd de Qur'an neergezonden?",a:["Ramadan","Radjab","Muharram","Shawwal"],e:"'De maand Ramadan waarin de Qur'an werd neergezonden…'",s:"Qur'an 2:185"},
+{c:"ramadan",d:1,q:"Verbreekt per ongeluk (vergeten) eten het vasten volgens de meerderheid?",a:["Nee, het vasten blijft geldig","Ja, altijd","Alleen bij drinken","Alleen na Dhuhr"],e:"'Wie vergeet en eet of drinkt: laat hem zijn vasten voltooien, want Allah heeft hem gevoed.'",s:"Sahih al-Bukhari & Muslim",m:"Hanafi, Shafi'i, Hanbali: vasten blijft geldig. Maliki: de dag blijft niet geldig en wordt later ingehaald (qada'), zonder boetedoening."},
+{c:"ramadan",d:2,q:"Laylat al-Qadr is beter dan…?",a:["Duizend maanden","Honderd dagen","Tien jaar","Eén jaar"],e:"'Laylat al-Qadr is beter dan duizend maanden.'",s:"Qur'an 97:3"},
+{c:"ramadan",d:2,q:"In welke nachten wordt Laylat al-Qadr gezocht?",a:["De oneven nachten van de laatste tien","De eerste tien nachten","Elke vrijdagnacht","15 Sha'ban"],e:"De Profeet ﷺ zei: zoek haar in de oneven nachten van de laatste tien van Ramadan.",s:"Sahih al-Bukhari"},
+{c:"ramadan",d:2,q:"Wie mogen het vasten uitstellen en later inhalen?",a:["De zieke en de reiziger","Niemand","Alleen kinderen","Alleen ouderen"],e:"Allah wil het jullie gemakkelijk maken: zij vasten later hetzelfde aantal dagen.",s:"Qur'an 2:184-185"},
+{c:"ramadan",d:3,q:"Wat is het oordeel over de suhur (maaltijd vóór fadjr)?",a:["Aanbevolen — er zit barakah in","Verplicht","Afgeraden","Alleen voor reizigers"],e:"'Neem de suhur, want in de suhur zit zegening (barakah).'",s:"Sahih al-Bukhari & Muslim"},
+{c:"ramadan",d:3,q:"Wat is i'tikaf?",a:["Verblijf in de moskee voor aanbidding, vooral de laatste tien dagen","Extra vasten in Shawwal","Het nachtgebed","Een kleine bedevaart"],e:"De Profeet ﷺ verrichtte i'tikaf in de laatste tien dagen van Ramadan.",s:"Sahih al-Bukhari & Muslim"},
+
+/* --- HAJJ --- */
+{c:"hajj",d:1,q:"De hoeveelste zuil van de islam is de hadj?",a:["De 5e","De 1e","De 3e","De 2e"],e:"De hadj is verplicht voor wie er de middelen en gezondheid voor heeft, één keer in het leven.",s:"Sahih al-Bukhari & Muslim; Qur'an 3:97"},
+{c:"hajj",d:1,q:"Tussen welke twee heuvels loop je de sa'i?",a:["Safa en Marwah","'Arafat en Mina","Uhud en Thawr","Hira' en Nur"],e:"'Safa en Marwah behoren tot de tekenen van Allah.' Het herinnert aan Hadjar's zoektocht naar water.",s:"Qur'an 2:158"},
+{c:"hajj",d:2,q:"Hoeveel rondjes telt de tawaf om de Ka'bah?",a:["7","5","3","10"],e:"Zeven rondes, beginnend en eindigend bij de Zwarte Steen.",s:"Sahih al-Bukhari & Muslim (praktijk van de Profeet ﷺ)"},
+{c:"hajj",d:2,q:"Op welke dag staan de pelgrims op 'Arafah?",a:["9 Dhul-Hidjdjah","10 Dhul-Hidjdjah","1 Ramadan","27 Radjab"],e:"De Profeet ﷺ zei: 'De hadj is 'Arafah.'",s:"Djami' at-Tirmidhi & Sunan an-Nasa'i (sahih)"},
+{c:"hajj",d:3,q:"Wat is 'ihram'?",a:["De gewijde staat (met intentie) waarin bepaalde zaken verboden zijn","Alleen de witte kleding","Een speciaal gebed","Het offerdier"],e:"Ihram begint met de intentie bij de miqat; de kleding is er het uiterlijke teken van.",s:"Fiqh-werken van de vier scholen"},
+{c:"hajj",d:4,q:"Is de sa'i een rukn (pilaar) van de hadj?",a:["Meerderheid (Maliki, Shafi'i, bekende Hanbali-positie): ja; Hanafi: wadjib, geen rukn","Alle scholen: geen rukn","Alleen bij 'umrah een rukn","Alle scholen: vrijwillig"],e:"Een bekend verschil met praktische gevolgen voor wie de sa'i mist.",s:"Fiqh-werken van de vier scholen",m:"Maliki & Shafi'i: rukn (hadj ongeldig zonder). Hanbali (bekende positie): rukn. Hanafi: wadjib — herstelbaar met een offer (dam)."},
+
+/* --- PROFETEN --- */
+{c:"profeten",d:1,q:"Wie is de vader van alle mensen?",a:["Adam","Nuh","Ibrahim","Idris"],e:"Allah schiep Adam (vrede zij met hem) en blies de ziel in hem; alle mensen stammen van hem af.",s:"Qur'an, o.a. soera al-Baqarah"},
+{c:"profeten",d:1,q:"Welke profeet bouwde de ark?",a:["Nuh","Musa","Hud","Salih"],e:"Nuh bouwde op bevel van Allah de ark voordat de zondvloed kwam.",s:"Qur'an, soera Hud & Nuh"},
+{c:"profeten",d:2,q:"Welke profeet wordt 'Khalilullah' (de innige vriend van Allah) genoemd?",a:["Ibrahim","Musa","'Isa","Yusuf"],e:"'En Allah nam Ibrahim tot innige vriend (khalil).'",s:"Qur'an 4:125"},
+{c:"profeten",d:2,q:"Welke profeet kon met dieren spreken en beheerste de djinn en de wind?",a:["Sulayman","Dawud","Yunus","Ayyub"],e:"Allah schonk Sulayman een koninkrijk als geen ander, inclusief het verstaan van de dieren.",s:"Qur'an, soera an-Naml & Sad"},
+{c:"profeten",d:3,q:"Welke profeet werd door een grote vis ingeslikt?",a:["Yunus","Yusuf","Ilyas","Zakariyya"],e:"Yunus (Dhu-n-Nun) riep in de duisternis: 'Er is geen god dan U, Glorie zij U, ik was werkelijk onrechtvaardig.'",s:"Qur'an 21:87"},
+{c:"profeten",d:3,q:"Welke profeet staat bekend om zijn geduld bij zware ziekte en verlies?",a:["Ayyub","Ya'qub","Nuh","Harun"],e:"Ayyub (Job) verloor gezondheid en bezit maar bleef geduldig; Allah herstelde alles.",s:"Qur'an, soera al-Anbiya' & Sad"},
+{c:"profeten",d:4,q:"Wie zijn de vijf 'Ulu-l-'Azm' (boodschappers met standvastigheid)?",a:["Nuh, Ibrahim, Musa, 'Isa en Muhammad ﷺ","Adam, Idris, Nuh, Hud en Salih","Yusuf, Ayyub, Yunus, Dawud en Sulayman","Alle profeten samen"],e:"Zij worden apart genoemd om hun bijzondere standvastigheid en zware beproevingen.",s:"Qur'an 33:7 & 46:35"},
+
+/* --- SIRAH --- */
+{c:"sirah",d:1,q:"In welke stad werd de Profeet ﷺ geboren?",a:["Makkah","Madinah","Ta'if","Jeruzalem"],e:"Hij ﷺ werd geboren in Makkah in het 'Jaar van de Olifant'.",s:"Sirah-literatuur"},
+{c:"sirah",d:1,q:"Hoe heette de moeder van de Profeet ﷺ?",a:["Aminah","Khadidjah","Halimah","Fatimah"],e:"Aminah bint Wahb; zij overleed toen hij nog jong was.",s:"Sirah-literatuur"},
+{c:"sirah",d:2,q:"Wie was de eerste vrouw van de Profeet ﷺ en de eerste gelovige?",a:["Khadidjah bint Khuwaylid","'A'ishah","Hafsah","Zaynab"],e:"Khadidjah steunde hem en was de eerste die in zijn boodschap geloofde.",s:"Sirah; Sahih al-Bukhari"},
+{c:"sirah",d:2,q:"Hoe heet de emigratie van Makkah naar Madinah?",a:["De Hidjrah","De Isra'","De Fath","De Ghazwah"],e:"De Hidjrah markeert het begin van de islamitische jaartelling.",s:"Sirah-literatuur"},
+{c:"sirah",d:3,q:"Wat was de eerste grote veldslag in de islam?",a:["Badr","Uhud","Al-Khandaq","Hunayn"],e:"In het 2e jaar na de Hidjrah overwon een kleine moslimgroep bij Badr een veel groter leger.",s:"Qur'an, soera al-Anfal; sirah"},
+{c:"sirah",d:3,q:"Hoe heette de reis in één nacht naar Jeruzalem en de hemelen?",a:["Al-Isra' wa-l-Mi'radj","De Hidjrah","De Fath van Makkah","Hilf al-Fudul"],e:"Tijdens de Mi'radj werden de vijf dagelijkse gebeden voorgeschreven.",s:"Qur'an, soera al-Isra'; sahih ahadith"},
+{c:"sirah",d:4,q:"In welk jaar (na de Hidjrah) vond de vreedzame verovering van Makkah plaats?",a:["8 H","2 H","6 H","10 H"],e:"Bij de Fath vergaf de Profeet ﷺ zijn voormalige vijanden op grootse wijze.",s:"Sirah-literatuur"},
+
+/* --- SAHABAH --- */
+{c:"sahabah",d:1,q:"Wie was de eerste kalief na de Profeet ﷺ?",a:["Abu Bakr as-Siddiq","'Umar","'Uthman","'Ali"],e:"Abu Bakr, de trouwe metgezel in de grot, werd de eerste rechtgeleide kalief.",s:"Historische consensus"},
+{c:"sahabah",d:1,q:"Wie stond bekend als 'al-Faruq' (die waarheid en onwaarheid onderscheidt)?",a:["'Umar ibn al-Khattab","'Ali","Bilal","Talhah"],e:"'Umar was de tweede kalief; onder hem breidde de islam zich sterk uit.",s:"Sirah- en geschiedenisbronnen"},
+{c:"sahabah",d:2,q:"Wie was de eerste mu'adhdhin (oproeper tot het gebed) in de islam?",a:["Bilal ibn Rabah","Abu Hurairah","Salman","Mu'adh"],e:"Bilal, een vrijgelaten slaaf, kreeg de eer de eerste adhan te verrichten.",s:"Sirah; hadithbronnen"},
+{c:"sahabah",d:2,q:"Welke kalief liet de Qur'an in één standaard-mus'haf verzamelen en verspreiden?",a:["'Uthman ibn 'Affan","Abu Bakr","'Umar","'Ali"],e:"'Uthman standaardiseerde de tekst om verschillen in recitatie te voorkomen; kopieën gingen naar de provincies.",s:"Sahih al-Bukhari"},
+{c:"sahabah",d:3,q:"Wie was de neef en schoonzoon van de Profeet ﷺ en de vierde kalief?",a:["'Ali ibn Abi Talib","Az-Zubayr","Sa'd ibn Abi Waqqas","'Abd ar-Rahman ibn 'Awf"],e:"'Ali groeide op in het huis van de Profeet ﷺ en huwde met zijn dochter Fatimah.",s:"Sirah- en geschiedenisbronnen"},
+{c:"sahabah",d:3,q:"Welke metgezel staat bekend als 'Sayf Allah al-Maslul' (het getrokken zwaard van Allah)?",a:["Khalid ibn al-Walid","'Amr ibn al-'As","Abu 'Ubaydah","Sa'd ibn Mu'adh"],e:"Khalid, een briljant veldheer, won talloze veldslagen na zijn bekering.",s:"Hadith- en geschiedenisbronnen"},
+{c:"sahabah",d:4,q:"Welke jonge metgezel werd door de Profeet ﷺ als de beste rechter/kenner van halal en haram geprezen?",a:["Mu'adh ibn Djabal","Zayd ibn Thabit","Ubayy ibn Ka'b","Abu Musa al-Ash'ari"],e:"Elke metgezel blonk uit in iets; Mu'adh in kennis van het toegestane en verbodene.",s:"Djami' at-Tirmidhi & Sunan Ibn Majah"},
+
+/* --- GESCHIEDENIS --- */
+{c:"geschiedenis",d:1,q:"Hoe heten de eerste vier kaliefen samen?",a:["De rechtgeleide kaliefen (al-Khulafa' ar-Rashidun)","De Umayyaden","De Abbasiden","De imams"],e:"Abu Bakr, 'Umar, 'Uthman en 'Ali; hun bestuur geldt als een voorbeeldperiode.",s:"Islamitische geschiedenis"},
+{c:"geschiedenis",d:2,q:"Welke dynastie maakte Damascus tot hoofdstad?",a:["De Umayyaden","De Abbasiden","De Ottomanen","De Fatimiden"],e:"De Umayyaden (661–750) bestuurden vanuit Damascus een enorm rijk.",s:"Islamitische geschiedenis"},
+{c:"geschiedenis",d:2,q:"Welke stad bouwden de Abbasiden als nieuwe hoofdstad en kenniscentrum?",a:["Bagdad","Caïro","Córdoba","Istanbul"],e:"Bagdad werd met het 'Huis van Wijsheid' een centrum van wetenschap en vertaling.",s:"Islamitische geschiedenis"},
+{c:"geschiedenis",d:3,q:"Wie heroverde Jeruzalem in 1187 op de kruisvaarders?",a:["Salah ad-Din al-Ayyubi","Baybars","Muhammad al-Fatih","Nur ad-Din"],e:"Salah ad-Din (Saladin) staat bekend om zijn ridderlijkheid en rechtvaardigheid.",s:"Islamitische geschiedenis"},
+{c:"geschiedenis",d:3,q:"Welke Ottomaanse sultan veroverde Constantinopel in 1453?",a:["Mehmed II (al-Fatih)","Sulayman I","Selim I","Bayezid II"],e:"De 21-jarige sultan vervulde een profetie over de verovering van de stad.",s:"Islamitische en Ottomaanse geschiedenis"},
+{c:"geschiedenis",d:4,q:"Welk islamitisch rijk bloeide in al-Andalus (het Iberisch schiereiland)?",a:["Het kalifaat van Córdoba","De Mamelukken","De Seldjoeken","De Mogols van India"],e:"Córdoba was eeuwenlang een baken van wetenschap, met o.a. grote bibliotheken.",s:"Islamitische geschiedenis"},
+
+/* --- SCHOLEN --- */
+{c:"scholen",d:1,q:"Hoeveel grote soennitische wetscholen (madhahib) zijn er?",a:["4","2","6","3"],e:"Hanafi, Maliki, Shafi'i en Hanbali — genoemd naar hun voornaamste imams.",s:"Islamitische rechtsgeschiedenis"},
+{c:"scholen",d:1,q:"Naar wie is de Hanafi-school genoemd?",a:["Imam Abu Hanifah","Imam Malik","Imam ash-Shafi'i","Imam Ahmad"],e:"An-Nu'man ibn Thabit (Abu Hanifah), overleden 150 H, uit Kufa.",s:"Rechtsgeschiedenis"},
+{c:"scholen",d:2,q:"Welke imam schreef 'al-Muwatta''?",a:["Imam Malik","Imam Abu Hanifah","Imam ash-Shafi'i","Imam Ahmad"],e:"Al-Muwatta' van Imam Malik van Madinah is een van de vroegste fiqh- en hadithwerken.",s:"Rechts- en hadithgeschiedenis"},
+{c:"scholen",d:2,q:"Welke imam wordt de grondlegger van de usul al-fiqh genoemd?",a:["Imam ash-Shafi'i","Imam Abu Hanifah","Imam Malik","Imam Ahmad"],e:"Zijn boek 'ar-Risalah' legde de theorie van de rechtsbronnen systematisch vast.",s:"Rechtsgeschiedenis"},
+{c:"scholen",d:3,q:"Wie was zowel groot hadithgeleerde als naamgever van een wetschool?",a:["Imam Ahmad ibn Hanbal","Imam Malik","Imam Abu Hanifah","Imam ash-Shafi'i"],e:"Zijn 'Musnad' bevat tienduizenden overleveringen; hij bleef standvastig tijdens de mihna.",s:"Rechts- en hadithgeschiedenis"},
+{c:"scholen",d:4,q:"Welke van deze bronnen erkennen alle vier de scholen als geldig bewijs?",a:["Qur'an, Sunnah, idjma' en qiyas","Alleen de Qur'an","Alleen dromen","Alleen gewoonte"],e:"Over aanvullende bronnen (istihsan, 'amal ahl al-Madinah, masalih) verschillen de scholen wél.",s:"Usul al-fiqh",m:"Alle vier erkennen Qur'an, Sunnah, idjma' en qiyas. Hanafi voegt istihsan toe; Maliki 'amal ahl al-Madinah en masalih mursalah; verschillen in gewicht per school."},
+
+/* --- ARABISCH --- */
+{c:"arabisch",d:1,q:"Wat betekent 'Alhamdulillah'?",a:["Alle lof is voor Allah","Allah is de Grootste","Er is geen god dan Allah","In de naam van Allah"],e:"Een uiting van dank en lof aan Allah.",s:"Qur'an 1:2"},
+{c:"arabisch",d:1,q:"Wat betekent 'InshaAllah'?",a:["Als Allah het wil","Alle lof voor Allah","Moge Allah je belonen","Vergeef mij"],e:"'En zeg nooit over iets: ik zal dat morgen doen, behalve (met): als Allah het wil.'",s:"Qur'an 18:23-24"},
+{c:"arabisch",d:2,q:"Wat betekent 'BarakAllahu fik'?",a:["Moge Allah je zegenen","Tot ziens","Sorry","Ik hou van je"],e:"Een mooie manier om iemand te bedanken of te feliciteren.",s:"Overgeleverde uitdrukking uit de Sunnah"},
+{c:"arabisch",d:2,q:"Wat betekent het woord 'islam' letterlijk?",a:["Overgave (aan Allah)","Vrede alleen","Gebed","Boek"],e:"Islam komt van dezelfde stam als 'salaam' (vrede): overgave die tot vrede leidt.",s:"Taalkundige betekenis"},
+{c:"arabisch",d:3,q:"Wat betekent 'taqwa'?",a:["Godsbewustzijn / vroomheid","Geduld","Dankbaarheid","Berouw"],e:"Taqwa is Allah's geboden naleven en Zijn verboden mijden uit ontzag voor Hem.",s:"Qur'an, o.a. 2:197"},
+{c:"arabisch",d:3,q:"Wat betekent 'Jazak Allahu khayran'?",a:["Moge Allah je met het goede belonen","Welkom","Gefeliciteerd","Vaarwel"],e:"De aanbevolen manier om dank uit te drukken tegenover iemand.",s:"Djami' at-Tirmidhi (sahih)"},
+{c:"arabisch",d:4,q:"Wat betekent 'ijtihad'?",a:["Zelfstandige inspanning om een oordeel af te leiden","Blind navolgen","Consensus","Recitatie"],e:"Wie de vereiste kennis heeft, spant zich in (ijtihad) om regels uit de bronnen af te leiden.",s:"Usul al-fiqh"},
+
+/* --- DUA --- */
+{c:"dua",d:1,q:"Wat zeg je als je niest (en de ander hoort het)?",a:["Alhamdulillah","BismiLlah","SubhanAllah","MashaAllah"],e:"De niezer zegt 'Alhamdulillah'; wie het hoort antwoordt 'Yarhamuk Allah'.",s:"Sahih al-Bukhari"},
+{c:"dua",d:1,q:"Wat zeg je voordat je begint met eten?",a:["Bismillah","Alhamdulillah","Astaghfirullah","Allahu akbar"],e:"'Noem de Naam van Allah (Bismillah), eet met je rechterhand en eet van wat vlakbij je is.'",s:"Sahih al-Bukhari & Muslim"},
+{c:"dua",d:2,q:"Welke adhkar worden 's ochtends en 's avonds sterk aanbevolen?",a:["Ayat al-Kursi en de laatste drie soera's","Alleen soera al-Fatihah","Alleen tijdens Ramadan","Enkel op vrijdag"],e:"Wie 's ochtends en 's avonds al-Ikhlas, al-Falaq en an-Nas driemaal leest, wordt beschermd.",s:"Sunan Abu Dawud & at-Tirmidhi (sahih/hasan)"},
+{c:"dua",d:2,q:"Wat betekent 'istighfar' (Astaghfirullah)?",a:["Om vergeving vragen aan Allah","Allah prijzen","Danken","Bidden om regen"],e:"'Ik vraag Allah om vergeving.' De Profeet ﷺ zei dit vaak per dag.",s:"Sahih Muslim"},
+{c:"dua",d:3,q:"Wat is de 'sayyid al-istighfar' (meester van het om vergeving vragen)?",a:["Een specifieke, uitgebreide du'a om vergeving","Elke willekeurige du'a","Het vrijdaggebed","Het nachtgebed"],e:"Wie deze du'a overtuigd overdag zegt en die dag sterft, behoort tot de mensen van het Paradijs.",s:"Sahih al-Bukhari"},
+{c:"dua",d:4,q:"Op welke momenten wordt de du'a volgens de Sunnah eerder verhoord?",a:["Het laatste derde deel van de nacht en tussen adhan en iqamah","Alleen op oudejaarsavond","Alleen tijdens de hadj","Nooit specifiek genoemd"],e:"Ook de dag van 'Arafah, tijdens het vasten en bij de sudjud zijn gezegende momenten.",s:"Sahih al-Bukhari & Muslim; Sunan-werken"},
+
+/* --- ADAB --- */
+{c:"adab",d:1,q:"Met welke hand eet en drink je volgens de Sunnah?",a:["De rechterhand","De linkerhand","Beide tegelijk","Maakt niet uit"],e:"'Als een van jullie eet, laat hem met zijn rechterhand eten.'",s:"Sahih Muslim"},
+{c:"adab",d:1,q:"Wat is de islamitische begroeting?",a:["As-salamu 'alaykum","Marhaban","Ahlan","Sabah al-khayr"],e:"'Vrede zij met jullie' — de gelovigen begroeten elkaar met vrede.",s:"Qur'an; Sahih al-Bukhari & Muslim"},
+{c:"adab",d:2,q:"Wat is het oordeel over glimlachen naar je broeder?",a:["Het is een vorm van sadaqah (liefdadigheid)","Het is afgeraden","Alleen toegestaan onder familie","Verplicht bij elke ontmoeting"],e:"'Je glimlach naar je broeder is voor jou een sadaqah.'",s:"Djami' at-Tirmidhi (hasan)"},
+{c:"adab",d:2,q:"Wat leert de islam over het nakomen van beloftes?",a:["Beloftes nakomen is een plicht; verbreken is een teken van hypocrisie","Beloftes zijn vrijblijvend","Alleen schriftelijke beloftes tellen","Alleen tegenover familie"],e:"'De tekenen van een hypocriet zijn drie: als hij spreekt liegt hij, als hij belooft breekt hij…'",s:"Sahih al-Bukhari & Muslim"},
+{c:"adab",d:3,q:"Wat zei de Profeet ﷺ over wie in Allah en de Laatste Dag gelooft en zijn buurman?",a:["Laat hem goed zijn voor zijn buurman","Buren zijn niet belangrijk","Alleen moslimburen tellen","Alleen familie telt"],e:"Djibril bleef de buurman zo aanbevelen dat de Profeet ﷺ dacht dat hij zou erven.",s:"Sahih al-Bukhari & Muslim"},
+{c:"adab",d:4,q:"Wat leert de Sunnah over bescheidenheid (haya')?",a:["Haya' is een tak van iman en brengt slechts goeds","Haya' is een zwakte","Haya' geldt alleen voor vrouwen","Haya' is afgeraden"],e:"'Schaamtegevoel (haya') brengt niets dan goeds.' En: 'Haya' is een tak van iman.'",s:"Sahih al-Bukhari & Muslim"},
+
+/* --- GELEERDEN --- */
+{c:"geleerden",d:1,q:"Waar staat 'al-Khwarizmi' om bekend?",a:["De grondlegger van de algebra","Geneeskunde","Sterrenkunde alleen","Poëzie"],e:"Het woord 'algoritme' en de term 'algebra' (al-djabr) gaan terug op zijn werk.",s:"Wetenschapsgeschiedenis"},
+{c:"geleerden",d:2,q:"Wie schreef 'al-Qanun fi-t-Tibb', eeuwenlang een medisch standaardwerk?",a:["Ibn Sina (Avicenna)","Ibn Rushd","Al-Razi","Al-Biruni"],e:"De 'Canon van de geneeskunde' werd tot in Europa aan universiteiten gebruikt.",s:"Wetenschapsgeschiedenis"},
+{c:"geleerden",d:2,q:"Welke geleerde wordt gezien als grondlegger van de sociologie en geschiedfilosofie?",a:["Ibn Khaldun","Al-Farabi","Al-Kindi","Ibn al-Haytham"],e:"Zijn 'Muqaddimah' analyseert de opkomst en ondergang van beschavingen.",s:"Wetenschapsgeschiedenis"},
+{c:"geleerden",d:3,q:"Wie legde met zijn boek over optica de basis voor de moderne wetenschappelijke methode?",a:["Ibn al-Haytham (Alhazen)","Ibn Sina","Djabir ibn Hayyan","Al-Zahrawi"],e:"Hij toonde via experimenten aan hoe zien werkt via licht dat het oog binnenkomt.",s:"Wetenschapsgeschiedenis"},
+{c:"geleerden",d:3,q:"Welke moslimgeleerde geldt als pionier van de chirurgie?",a:["Az-Zahrawi (Albucasis)","Ibn Rushd","Al-Ghazali","At-Tabari"],e:"Zijn medische encyclopedie 'at-Tasrif' beschreef vele chirurgische instrumenten.",s:"Wetenschapsgeschiedenis"},
+{c:"geleerden",d:4,q:"Wie schreef het invloedrijke werk 'Ihya' 'Ulum ad-Din'?",a:["Imam al-Ghazali","Ibn Taymiyyah","An-Nawawi","Ibn al-Qayyim"],e:"Al-Ghazali (Hujjat al-Islam) verbond fiqh, spiritualiteit en ethiek in dit standaardwerk.",s:"Islamitische geleerdengeschiedenis"},
+
+/* --- ALGEMEEN --- */
+{c:"algemeen",d:1,q:"Hoeveel zuilen (arkan) telt de islam?",a:["5","6","4","7"],e:"Shahadah, salah, zakah, sawm (vasten) en hadj.",s:"Sahih al-Bukhari & Muslim"},
+{c:"algemeen",d:1,q:"Wat is de eerste zuil van de islam?",a:["De shahadah (geloofsgetuigenis)","Het gebed","Het vasten","De hadj"],e:"Getuigen dat er geen god is dan Allah en dat Muhammad ﷺ Zijn boodschapper is.",s:"Sahih al-Bukhari & Muslim"},
+{c:"algemeen",d:2,q:"Welke dag is voor moslims de beste dag van de week?",a:["Vrijdag (al-Djumu'ah)","Maandag","Zaterdag","Zondag"],e:"'De beste dag waarop de zon opkomt, is vrijdag.'",s:"Sahih Muslim"},
+{c:"algemeen",d:2,q:"Hoeveel maanden telt de islamitische (maan)kalender?",a:["12","10","13","11"],e:"'Het aantal maanden bij Allah is twaalf.' Vier daarvan zijn heilig.",s:"Qur'an 9:36"},
+{c:"algemeen",d:3,q:"Welke maanden behoren tot de heilige maanden (al-ashhur al-hurum)?",a:["Dhul-Qa'dah, Dhul-Hidjdjah, Muharram en Radjab","Alleen Ramadan","Shawwal en Sha'ban","Alle maanden even zwaar"],e:"In deze maanden wegen goede en slechte daden zwaarder.",s:"Qur'an 9:36; Sahih al-Bukhari"},
+{c:"algemeen",d:3,q:"Wat is het eerste dat op de Dag des Oordeels wordt berekend?",a:["Het gebed (salah)","Zakat","De hadj","Het vasten"],e:"'Het eerste waarover de dienaar ter verantwoording wordt geroepen, is zijn gebed.'",s:"Djami' at-Tirmidhi & Sunan an-Nasa'i (sahih)"},
+{c:"algemeen",d:4,q:"Hoeveel poorten heeft het Paradijs volgens de overlevering?",a:["8","7","10","5"],e:"Er is o.a. een poort genaamd 'ar-Rayyan', speciaal voor wie veel vastten.",s:"Sahih al-Bukhari & Muslim"}
+];
+</script>
+<script>
+/* ================= STATE ================= */
+const DEFAULT={
+ name:"Speler", avatar:"🙂", theme:"light", lang:"nl",
+ sound:true, notif:true,
+ xp:0, coins:120, level:1, streak:0, lastPlay:null,
+ answered:0, correct:0, bestCombo:0,
+ catStats:{}, badges:[], ownedAv:[...START_AV],
+ dailyDate:null, dailyDone:false, wheelDate:null,
+ friends:[{n:"Yusuf",xp:8200,a:"🕌"},{n:"Aisha",xp:6400,a:"🌙"},{n:"Bilal",xp:5100,a:"⭐"}]
+};
+let S=load();
+function load(){
+  try{const r=localStorage.getItem("ilmquest");if(r){return Object.assign(JSON.parse(JSON.stringify(DEFAULT)),JSON.parse(r));}}catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){try{localStorage.setItem("ilmquest",JSON.stringify(S));}catch(e){}}
+
+/* ================= MATH / HELPERS ================= */
+const xpForLevel=l=>Math.round(60*Math.pow(l,1.35)); // xp needed to go from l -> l+1
+function totalXpForLevel(l){let t=0;for(let i=1;i<l;i++)t+=xpForLevel(i);return t;}
+function levelFromXp(xp){let l=1;while(xp>=totalXpForLevel(l+1))l++;return l;}
+function lvlProgress(){const l=S.level,base=totalXpForLevel(l),next=totalXpForLevel(l+1);return{have:S.xp-base,need:next-base,pct:Math.min(100,Math.round((S.xp-base)/(next-base)*100))};}
+function addXp(n){S.xp+=n;const nl=levelFromXp(S.xp);if(nl>S.level){const diff=nl-S.level;S.level=nl;setTimeout(()=>levelUpModal(nl),650);S.coins+=diff*40;}save();}
+function addCoins(n){S.coins=Math.max(0,S.coins+n);save();}
+const todayStr=()=>new Date().toISOString().slice(0,10);
+function catP(c){const st=S.catStats[c]||{a:0,c:0};return st.a?Math.round(st.c/st.a*100):0;}
+function el(id){return document.getElementById(id);}
+function esc(s){return(s+"").replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
+
+/* ================= SOUND (Web Audio, cheerful) ================= */
+let AC;
+function tone(freq,dur=0.12,type="sine",vol=0.13,delay=0){
+  if(!S.sound)return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime+delay,o=AC.createOscillator(),g=AC.createGain();
+    o.type=type;o.frequency.value=freq;o.connect(g);g.connect(AC.destination);
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.start(t);o.stop(t+dur+0.02);
+  }catch(e){}
+}
+const SFX={
+  tap:()=>tone(520,0.06,"triangle",0.06),
+  right:()=>{tone(660,0.1,"sine",0.14);tone(880,0.12,"sine",0.13,0.09);tone(1180,0.16,"sine",0.12,0.19);},
+  wrong:()=>{tone(300,0.16,"sawtooth",0.09);tone(200,0.2,"sawtooth",0.08,0.1);},
+  coin:()=>{tone(1000,0.07,"square",0.08);tone(1400,0.09,"square",0.07,0.06);},
+  level:()=>{[523,659,784,1046].forEach((f,i)=>tone(f,0.2,"sine",0.14,i*0.12));},
+  streak:()=>{[784,988,1318].forEach((f,i)=>tone(f,0.14,"triangle",0.12,i*0.08));},
+  spin:()=>tone(440,0.4,"triangle",0.05)
+};
+
+/* ================= TOAST / CONFETTI ================= */
+let toT;
+function toast(msg){const t=el("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toT);toT=setTimeout(()=>t.classList.remove("show"),1900);}
+function confetti(n=26){const em=["🎉","✨","⭐","🟢","🟡","🕌","📿"];for(let i=0;i<n;i++){const c=document.createElement("div");c.className="confetti";c.textContent=em[i%em.length];c.style.left=Math.random()*100+"%";c.style.animationDelay=Math.random()*0.35+"s";c.style.fontSize=(12+Math.random()*14)+"px";document.body.appendChild(c);setTimeout(()=>c.remove(),1700);}}
+
+/* ================= MODAL ================= */
+function modal(html){el("modalhost").innerHTML=`<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`;}
+function closeModal(){el("modalhost").innerHTML="";}
+function levelUpModal(l){SFX.level();confetti(34);modal(`<div class="center"><div style="font-size:60px">🏅</div><h2 class="serif">Level ${l}!</h2><p class="sub mt8">Nieuwe kennis ontgrendeld. Je verdiende <b>+${( (l))*40} munten</b>.</p><button class="btn gold mt" onclick="closeModal()">Verder</button></div>`);checkBadges();}
+
+/* ================= i18n (kern-UI) ================= */
+const T={
+ nl:{play:"Speel nu",quick:"Snelle quiz",daily:"Dagelijkse uitdaging",modes:"Spelmodi",cats:"Categorieën",correct:"Juist!",wrong:"Helaas",source:"Bron",madhahib:"Verschil tussen de wetscholen",explain:"Uitleg",next:"Volgende",finish:"Afronden",score:"Score",back:"Terug"},
+ en:{play:"Play now",quick:"Quick quiz",daily:"Daily challenge",modes:"Game modes",cats:"Categories",correct:"Correct!",wrong:"Not quite",source:"Source",madhahib:"Difference between the schools",explain:"Explanation",next:"Next",finish:"Finish",score:"Score",back:"Back"},
+ ar:{play:"العب الآن",quick:"اختبار سريع",daily:"التحدي اليومي",modes:"أنماط اللعب",cats:"الفئات",correct:"إجابة صحيحة!",wrong:"للأسف",source:"المصدر",madhahib:"الفرق بين المذاهب",explain:"الشرح",next:"التالي",finish:"إنهاء",score:"النتيجة",back:"رجوع"}
+};
+function t(k){return (T[S.lang]&&T[S.lang][k])||T.nl[k]||k;}
+function applyTheme(){document.documentElement.setAttribute("data-theme",S.theme==="dark"?"dark":"light");document.documentElement.setAttribute("dir",S.lang==="ar"?"rtl":"ltr");}
+
+/* ================= ROUTER ================= */
+let CUR="home";
+function go(v){CUR=v;SFX.tap();["home","cats","lb","badges","profile"].forEach(n=>{const b=el("nb-"+n);if(b)b.className=(n===v?"on":"");});render();window.scrollTo(0,0);}
+function render(){applyTheme();const a=el("app");
+  if(CUR==="home")a.innerHTML=viewHome();
+  else if(CUR==="cats")a.innerHTML=viewCats();
+  else if(CUR==="lb")a.innerHTML=viewLeaderboard();
+  else if(CUR==="badges")a.innerHTML=viewBadges();
+  else if(CUR==="profile")a.innerHTML=viewProfile();
+}
+/* ================= BADGES ================= */
+const BADGES=[
+ {id:"first",i:"🌟",n:"Eerste stap",d:"Beantwoord je eerste vraag",chk:s=>s.answered>=1},
+ {id:"ten",i:"🔟",n:"Op dreef",d:"Beantwoord 10 vragen",chk:s=>s.answered>=10},
+ {id:"fifty",i:"💪",n:"Doorzetter",d:"Beantwoord 50 vragen",chk:s=>s.answered>=50},
+ {id:"combo5",i:"🔥",n:"Vlammend",d:"5 goede antwoorden op rij",chk:s=>s.bestCombo>=5},
+ {id:"combo10",i:"⚡",n:"Onstuitbaar",d:"10 goede antwoorden op rij",chk:s=>s.bestCombo>=10},
+ {id:"streak3",i:"📅",n:"Trouwe student",d:"3 dagen streak",chk:s=>s.streak>=3},
+ {id:"streak7",i:"🗓️",n:"Weekheld",d:"7 dagen streak",chk:s=>s.streak>=7},
+ {id:"lvl5",i:"🎖️",n:"Kenner",d:"Bereik level 5",chk:s=>s.level>=5},
+ {id:"lvl10",i:"👑",n:"Geleerde in wording",d:"Bereik level 10",chk:s=>s.level>=10},
+ {id:"rich",i:"💰",n:"Schatbewaarder",d:"Verzamel 500 munten",chk:s=>s.coins>=500},
+ {id:"quran",i:"📖",n:"Vriend van de Qur'an",d:"25 goed in Qur'an",chk:s=>(s.catStats.quran||{}).c>=25},
+ {id:"scholar",i:"🎓",n:"Fiqh-fan",d:"25 goed in Fiqh",chk:s=>(s.catStats.fiqh||{}).c>=25},
+ {id:"explorer",i:"🧭",n:"Ontdekker",d:"Speel 8 verschillende categorieën",chk:s=>Object.values(s.catStats).filter(x=>x.a>0).length>=8},
+ {id:"perfect",i:"💯",n:"Perfecte ronde",d:"10/10 in een quiz",chk:()=>false},
+ {id:"ramadan",i:"🌙",n:"Ster van Ramadan",d:"Speel de Ramadan-modus",chk:()=>false},
+ {id:"wheel",i:"🎡",n:"Gelukzoeker",d:"Draai aan het Rad van Fortuin",chk:()=>false},
+];
+function grant(id){if(!S.badges.includes(id)){S.badges.push(id);save();const b=BADGES.find(x=>x.id===id);if(b){confetti(24);toast("🎖️ Badge: "+b.n);}}}
+function checkBadges(){BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.chk(S))grant(b.id);});}
+
+/* ================= DAILY / STREAK ================= */
+function touchStreak(){const t=todayStr();if(S.lastPlay===t)return;const y=new Date(Date.now()-864e5).toISOString().slice(0,10);S.streak=(S.lastPlay===y)?S.streak+1:1;S.lastPlay=t;if(S.streak>1)SFX.streak();save();checkBadges();}
+
+/* ================= HOME ================= */
+function viewHome(){
+ const p=lvlProgress();const dailyReady=S.dailyDate!==todayStr();
+ return `
+ <div class="top">
+   <div class="row">
+     <div class="avatar" onclick="go('profile')">${S.avatar}</div>
+     <div>
+       <div style="font-weight:800;font-size:15px">${esc(S.name)}</div>
+       <div class="sub">${DIFFS[1].i} Level ${S.level} · ${S.xp} XP</div>
+     </div>
+   </div>
+   <div class="row" style="gap:8px">
+     <span class="chip">🔥 ${S.streak}</span>
+     <span class="chip gold">🪙 ${S.coins}</span>
+   </div>
+ </div>
+
+ <div class="card hero">
+   <div class="eyebrow">Bismillah — <span class="orn">﷽</span></div>
+   <h1 class="mt8">Leer de islam,<br>één vraag per keer.</h1>
+   <p class="mt8" style="opacity:.9;font-size:14px">Authentieke bronnen uit Qur'an & Sunnah, met respect voor de vier wetscholen.</p>
+   <div class="xpwrap mt" style="background:rgba(255,255,255,.18)"><div class="xpfill" style="width:${p.pct}%"></div></div>
+   <div class="spread mt8" style="font-size:12px;opacity:.85"><span>Level ${S.level}</span><span>${p.have}/${p.need} XP → Level ${S.level+1}</span></div>
+ </div>
+
+ <div class="grid2 mt">
+   <button class="btn" onclick="pickCategory('mix')">▶️ ${t('play')}</button>
+   <button class="btn gold" onclick="startQuiz({mode:'quick',cat:'mix',diff:0,count:10})">⚡ ${t('quick')}</button>
+ </div>
+
+ <div class="card mt" style="${dailyReady?'':'opacity:.75'}">
+   <div class="spread">
+     <div class="row"><span style="font-size:26px">📆</span><div><b>${t('daily')}</b><div class="sub">${dailyReady?"5 vragen · dubbele XP":"Voltooid — kom morgen terug"}</div></div></div>
+     <button class="btn small ${dailyReady?'gold':'ghost'}" ${dailyReady?"":"disabled"} onclick="startDaily()">${dailyReady?"Start":"✓"}</button>
+   </div>
+ </div>
+
+ <div class="spread mt"><b class="serif" style="font-size:17px">${t('modes')}</b><span class="sub" onclick="go('cats')" style="cursor:pointer">Alle categorieën →</span></div>
+ <div class="grid2 mt8">
+   ${modeTile("solo","🎯","Solo","Speel op je tempo")}
+   ${modeTile("1v1","⚔️","1 tegen 1","2 spelers, om beurten")}
+   ${modeTile("team","👥","Teammodus","Twee teams strijden")}
+   ${modeTile("family","👨‍👩‍👧","Familiequiz","Samen thuis spelen")}
+   ${modeTile("ramadan","🌙","Ramadan-modus","Thema: vasten & Qur'an")}
+   ${modeTile("endless","♾️","Eindeloos","3 levens, hoogste reeks")}
+   ${modeTile("tournament","🏟️","Toernooi","3 rondes knock-out")}
+   ${modeTile("friends","🤝","Vrienden uitdagen","Verstuur een uitdaging")}
+ </div>
+
+ <div class="card mt">
+   <div class="spread">
+     <div class="row"><span style="font-size:26px">🎡</span><div><b>Rad van Fortuin</b><div class="sub">${S.wheelDate!==todayStr()?"Gratis draai beschikbaar":"Volgende gratis draai morgen"}</div></div></div>
+     <button class="btn small gold" onclick="openWheel()">Draai</button>
+   </div>
+ </div>
+ <div class="card mt8">
+   <div class="spread">
+     <div class="row"><span style="font-size:26px">🎁</span><div><b>Mystery Box</b><div class="sub">Cosmetische avatar · 60 🪙</div></div></div>
+     <button class="btn small ${S.coins>=60?'':'ghost'}" ${S.coins>=60?'':'disabled'} onclick="openMysteryBox()">Open</button>
+   </div>
+ </div>
+ <p class="center sub mt" style="padding:0 10px">📚 Alle vragen zijn onderbouwd met bron. Bij meningsverschil tonen we per wetschool het standpunt.</p>
+ `;
+}
+function modeTile(mode,ic,name,desc){
+ const locks={tournament:5,ramadan:0};const need=locks[mode]||0;const locked=need>S.level;
+ return `<div class="tile ${locked?'locked':''}" onclick="${locked?`toast('🔒 Ontgrendelt op level ${need}')`:`chooseMode('${mode}')`}">
+   <div class="ic">${ic}</div><b>${name}</b><small>${locked?'🔒 Level '+need:desc}</small></div>`;
+}
+/* ================= CATEGORIES ================= */
+function viewCats(){
+ let tiles=Object.keys(CATS).map(k=>{
+   const p=catP(k);const st=S.catStats[k]||{a:0};
+   return `<div class="tile" onclick="pickCategory('${k}')">
+     <div class="ic">${CATS[k].i}</div><b>${CATS[k].n}</b>
+     <small>${st.a?st.a+' gespeeld · '+p+'% goed':'Nog niet gespeeld'}</small>
+     <div class="miniprog"><i style="width:${p}%"></i></div></div>`;
+ }).join("");
+ return `<div class="spread"><h2 class="serif">${t('cats')}</h2><span class="chip">${Object.keys(CATS).length}</span></div>
+   <p class="sub mt8">Kies een onderwerp. Daarna kies je de moeilijkheidsgraad.</p>
+   <div class="card mt" style="background:linear-gradient(150deg,var(--pine),var(--green));color:#F6F1E2;border:none;cursor:pointer" onclick="pickCategory('mix')">
+     <div class="spread"><div class="row"><span style="font-size:26px">🎲</span><div><b>Gemengd</b><div style="opacity:.85;font-size:12.5px">Vragen uit alle categorieën</div></div></div><span class="orn" style="font-size:22px">→</span></div>
+   </div>
+   <div class="grid2 mt">${tiles}</div>`;
+}
+
+/* ================= LEADERBOARD ================= */
+function viewLeaderboard(){
+ let people=[...S.friends,{n:S.name,xp:S.xp,a:S.avatar,me:true},
+   {n:"Fatimah",xp:9700,a:"🌟"},{n:"Ibrahim",xp:11200,a:"🕋"},{n:"Maryam",xp:3200,a:"📿"},{n:"Omar",xp:2100,a:"🐪"}];
+ people.sort((a,b)=>b.xp-a.xp);
+ const medals=["🥇","🥈","🥉"];
+ const rows=people.map((p,i)=>`<div class="lbrow ${p.me?'me':''}">
+   <div class="rank">${medals[i]||(i+1)}</div>
+   <div class="avatar" style="width:36px;height:36px;font-size:18px;border-width:1.5px">${p.a}</div>
+   <div style="flex:1"><b>${esc(p.n)}${p.me?' (jij)':''}</b><div class="sub">Level ${levelFromXp(p.xp)}</div></div>
+   <div class="chip gold">${p.xp} XP</div></div>`).join("");
+ return `<div class="spread"><h2 class="serif">🏆 Ranglijst</h2></div>
+  <div class="grid3 mt8">
+    <div class="tile" style="cursor:default"><div class="ic">🌍</div><b>Wereld</b><small>Wekelijks</small></div>
+    <div class="tile" style="cursor:default;opacity:.6"><div class="ic">👥</div><b>Vrienden</b><small>Live</small></div>
+    <div class="tile" style="cursor:default;opacity:.6"><div class="ic">🏫</div><b>Klas</b><small>Binnenkort</small></div>
+  </div>
+  <div class="card mt">${rows}</div>
+  <p class="center sub mt">Verdien XP door quizzen te spelen en stijg op de ranglijst.</p>`;
+}
+
+/* ================= BADGES VIEW ================= */
+function viewBadges(){
+ const got=S.badges.length;
+ const rows=BADGES.map(b=>{const un=S.badges.includes(b.id);
+   return `<div class="badge ${un?'':'locked'}"><div class="bic">${un?b.i:'🔒'}</div>
+     <div style="flex:1"><b>${b.n}</b><div class="sub">${b.d}</div></div>${un?'<span class="chip">✓</span>':''}</div>`;
+ }).join("");
+ return `<div class="spread"><h2 class="serif">🎖️ Prestaties</h2><span class="chip gold">${got}/${BADGES.length}</span></div>
+  <div class="card mt8" style="background:linear-gradient(150deg,var(--pine),var(--green));color:#F6F1E2;border:none">
+    <div class="spread"><div><div class="eyebrow" style="color:#CBB877">Voltooid</div><div style="font-size:30px;font-weight:800;font-family:Georgia">${Math.round(got/BADGES.length*100)}%</div></div><div style="font-size:44px">🏅</div></div>
+    <div class="xpwrap mt" style="background:rgba(255,255,255,.18)"><div class="xpfill" style="width:${got/BADGES.length*100}%"></div></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:10px" class="mt">${rows}</div>`;
+}
+
+/* ================= PROFILE ================= */
+function viewProfile(){
+ const acc=S.answered?Math.round(S.correct/S.answered*100):0;
+ const cats=Object.keys(CATS).filter(k=>(S.catStats[k]||{}).a>0)
+   .sort((a,b)=>catP(b)-catP(a))
+   .map(k=>`<div class="catbar"><div class="spread"><span>${CATS[k].i} ${CATS[k].n}</span><b>${catP(k)}%</b></div><div class="miniprog"><i style="width:${catP(k)}%"></i></div></div>`).join("")
+   ||`<p class="sub">Speel een quiz om je voortgang per categorie te zien.</p>`;
+ return `<div class="spread"><h2 class="serif">👤 Profiel</h2><button class="btn small ghost" onclick="openSettings()">⚙️ Instellingen</button></div>
+  <div class="card mt8 center">
+    <div class="avatar" style="width:76px;height:76px;font-size:40px;margin:0 auto" onclick="openAvatar()">${S.avatar}</div>
+    <h2 class="serif mt8" style="cursor:pointer" onclick="editName()">${esc(S.name)} ✏️</h2>
+    <div class="sub">Level ${S.level} · ${S.xp} XP</div>
+    <div class="row mt" style="justify-content:center;gap:8px">
+      <span class="chip">🔥 ${S.streak} dagen</span><span class="chip gold">🪙 ${S.coins}</span><span class="chip">🎖️ ${S.badges.length}</span>
+    </div>
+  </div>
+  <div class="grid3 mt">
+    ${stat("📝",S.answered,"Vragen")}${stat("✅",acc+"%","Correct")}${stat("⚡",S.bestCombo,"Beste reeks")}
+  </div>
+  <div class="card mt"><b class="serif">📊 Voortgang per categorie</b><div class="mt8">${cats}</div></div>
+  <div class="card mt">
+    <b class="serif">👥 Vrienden</b>
+    <div class="mt8">${S.friends.map(f=>`<div class="lbrow"><div class="avatar" style="width:34px;height:34px;font-size:17px;border-width:1.5px">${f.a}</div><div style="flex:1"><b>${esc(f.n)}</b><div class="sub">Level ${levelFromXp(f.xp)}</div></div><button class="btn small ghost" onclick="challengeFriend('${esc(f.n)}')">Daag uit</button></div>`).join("")}</div>
+    <button class="btn ghost mt8" onclick="addFriend()">➕ Vriend toevoegen</button>
+  </div>
+  <div class="card mt">
+    <b class="serif">🔁 Herhaling</b>
+    <p class="sub mt8">Oefen opnieuw met vragen die je eerder fout had.</p>
+    <button class="btn mt8" onclick="startReview()">Start herhalingsmodus</button>
+  </div>`;
+}
+function stat(ic,v,l){return `<div class="tile" style="cursor:default;align-items:center;text-align:center"><div class="ic">${ic}</div><b style="font-size:18px">${v}</b><small>${l}</small></div>`;}
+/* ================= QUIZ SELECTION FLOW ================= */
+function chooseMode(mode){
+ SFX.tap();
+ if(mode==="ramadan"){startQuiz({mode:"ramadan",cat:"ramadan",diff:0,count:10,label:"🌙 Ramadan-modus"});return;}
+ if(mode==="endless"){startQuiz({mode:"endless",cat:"mix",diff:0,count:999,lives:3,label:"♾️ Eindeloos"});return;}
+ if(mode==="friends"){openFriendsChallenge();return;}
+ if(mode==="tournament"){startQuiz({mode:"tournament",cat:"mix",diff:0,count:9,rounds:true,label:"🏟️ Toernooi"});return;}
+ if(mode==="1v1"||mode==="team"||mode==="family"){openTeamSetup(mode);return;}
+ pickCategory("mix",mode); // solo default
+}
+function pickCategory(cat,mode){
+ SFX.tap();mode=mode||"solo";
+ const label=cat==="mix"?"🎲 Gemengd":CATS[cat].i+" "+CATS[cat].n;
+ modal(`<div class="spread"><h2 class="serif">Moeilijkheid</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+  <p class="sub mt8">${label} — kies je niveau.</p>
+  <div style="display:flex;flex-direction:column;gap:10px" class="mt">
+   ${[1,2,3,4].map(d=>{const need=DIFF_LVL[d];const locked=need>S.level;
+     return `<button class="opt" style="justify-content:space-between" ${locked?`disabled`:`onclick="closeModal();startQuiz({mode:'${mode}',cat:'${cat}',diff:${d},count:10,label:\'${label}\'})"`}>
+       <span>${DIFFS[d].i} ${DIFFS[d].n}</span>${locked?`<span class="lockbadge">🔒 Lvl ${need}</span>`:`<span class="sub">10 vragen</span>`}</button>`;}).join("")}
+  </div>
+  <button class="btn ghost mt" onclick="closeModal();startQuiz({mode:'${mode}',cat:'${cat}',diff:0,count:10,label:\'${label}\'})">🎯 Gemengd niveau</button>`);
+}
+
+/* ================= QUIZ ENGINE ================= */
+let Q=null;
+function pool(cat,diff){
+ let p=QUESTIONS.filter(q=>(cat==="mix"||q.c===cat)&&(diff===0||q.d===diff));
+ if(p.length<4)p=QUESTIONS.filter(q=>cat==="mix"||q.c===cat);
+ if(p.length<4)p=QUESTIONS.slice();
+ return p;
+}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startDaily(){startQuiz({mode:"daily",cat:"mix",diff:0,count:5,daily:true,label:"📆 Dagelijkse uitdaging"});}
+function startReview(){
+ const wrong=(S.wrongIds||[]).map(i=>QUESTIONS[i]).filter(Boolean);
+ if(!wrong.length){toast("🎉 Geen foute vragen om te herhalen!");return;}
+ Q={list:shuffle(wrong).slice(0,10).map(prep),i:0,mode:"review",combo:0,score:0,xp:0,coins:0,right:0,label:"🔁 Herhaling"};
+ el("modalhost").innerHTML="";renderQuiz();
+}
+function prep(q){
+ const correct=q.a[0];
+ const opts=shuffle(q.a);
+ return {q:q.q,opts,correct,e:q.e,s:q.s,m:q.m||null,c:q.c,d:q.d,idx:QUESTIONS.indexOf(q)};
+}
+function startQuiz(cfg){
+ touchStreak();
+ let p=shuffle(pool(cfg.cat,cfg.diff)).slice(0,Math.min(cfg.count,pool(cfg.cat,cfg.diff).length));
+ if(cfg.mode==="endless")p=shuffle(pool("mix",0)); // will loop
+ Q={list:p.map(prep),i:0,mode:cfg.mode,combo:0,score:0,xp:0,coins:0,right:0,
+    lives:cfg.lives||0,daily:cfg.daily||false,label:cfg.label||"Quiz",
+    rounds:cfg.rounds||false,cat:cfg.cat,diff:cfg.diff,
+    teams:cfg.teams||null,turn:0,answeredCount:0};
+ el("modalhost").innerHTML="";
+ if(cfg.teams){Q.teamScores=cfg.teams.map(()=>0);}
+ renderQuiz();
+}
+function curQ(){
+ if(Q.mode==="endless"){return Q.list[Q.i % Q.list.length];}
+ return Q.list[Q.i];
+}
+let timerRAF=null,timerEnd=0;
+function renderQuiz(){
+ clearTimeout(Q._to);cancelAnimationFrame(timerRAF);
+ const q=curQ();
+ const total=Q.mode==="endless"?"∞":Q.list.length;
+ const num=Q.mode==="endless"?Q.answeredCount+1:Q.i+1;
+ const isBonus=(Q.mode!=="endless")&&((Q.i+1)%5===0)&&Q.i>0&&Q.mode!=="daily"; // every 5th = bonus
+ const surprise=Math.random()<0.16 && Q.mode!=="daily"; // surprise round chance
+ Q._bonus=isBonus;Q._surprise=surprise&&!isBonus;
+ const timed=Q._surprise||isBonus||Q.mode==="tournament";
+ const secs=isBonus?12:(Q._surprise?8:15);
+ const livesHtml=Q.lives?`<span class="lives" title="levens">${"❤️".repeat(Q.lives)}${"🖤".repeat(Math.max(0,3-Q.lives))}</span>`:"";
+ const teamHtml=Q.teams?`<span class="chip">${Q.teams[Q.turn]} aan zet</span>`:"";
+ el("app").innerHTML=`
+  <div class="qmeta">
+    <button class="btn small ghost" onclick="quitQuiz()">✕</button>
+    <div class="row" style="gap:6px">${teamHtml}${livesHtml}<span class="chip gold">🪙 ${Q.coins}</span></div>
+    <span class="chip">${num}/${total}</span>
+  </div>
+  <div class="xpwrap" style="height:8px"><div class="xpfill" style="width:${Q.mode==='endless'?50:Math.round(Q.i/Q.list.length*100)}%;background:linear-gradient(90deg,var(--green2),var(--gold))"></div></div>
+  ${teamHtml?`<div class="turnbanner mt" style="padding:12px">🎮 <b>${Q.teams[Q.turn]}</b> — jouw beurt!</div>`:""}
+  ${isBonus?`<div class="bonusbar mt">⭐ BONUSVRAAG · dubbele punten!</div>`:""}
+  ${Q._surprise?`<div class="bonusbar mt" style="background:linear-gradient(135deg,#8ED0B4,var(--green2));color:#06281e">🎲 VERRASSINGSRONDE · snelle vraag!</div>`:""}
+  ${timed?`<div class="timerbar mt8"><i id="tbar" style="width:100%"></i></div>`:`<div class="mt8"></div>`}
+  <div class="qcard ${isBonus?'bonus':''} mt8">
+    <div class="spread"><span class="chip">${CATS[q.c].i} ${CATS[q.c].n}</span><span class="sub">${DIFFS[q.d].i} ${DIFFS[q.d].n}</span></div>
+    <h2 class="mt8">${esc(q.q)}</h2>
+    ${Q.combo>=2?`<div class="chip mt8" style="background:linear-gradient(135deg,#F7B733,#FC4A1A);color:#fff">🔥 ${Q.combo} op rij! (+${combBonus()} bonus)</div>`:""}
+    <div class="opts" id="opts">
+      ${q.opts.map((o,k)=>`<button class="opt" onclick="answer(${k})"><span class="abc">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join("")}
+    </div>
+  </div>
+  ${Q.mode!=='endless'&&Q.mode!=='daily'?`<button class="btn ghost mt" onclick="useHint()">💡 50/50 hint (20 🪙)</button>`:""}
+  `;
+ if(timed)startTimer(secs);
+}
+function combBonus(){return Math.min(Q.combo*2,20);}
+function startTimer(secs){
+ timerEnd=performance.now()+secs*1000;
+ const step=()=>{
+   const left=Math.max(0,timerEnd-performance.now());
+   const bar=el("tbar");if(!bar)return;
+   bar.style.width=(left/(secs*1000)*100)+"%";
+   if(left<=0){answer(-1);return;}
+   timerRAF=requestAnimationFrame(step);
+ };
+ timerRAF=requestAnimationFrame(step);
+}
+function useHint(){
+ if(Q._hintUsed)return;
+ if(S.coins<20){toast("Niet genoeg munten");return;}
+ addCoins(-20);Q._hintUsed=true;SFX.tap();
+ const q=curQ();const btns=[...document.querySelectorAll("#opts .opt")];
+ let removed=0;btns.forEach((b,k)=>{if(q.opts[k]!==q.correct&&removed<2){b.classList.add("dim");b.disabled=true;removed++;}});
+ el("app").querySelector(".btn.ghost").style.display="none";
+}
+function answer(k){
+ cancelAnimationFrame(timerRAF);
+ const q=curQ();const btns=[...document.querySelectorAll("#opts .opt")];
+ btns.forEach(b=>b.disabled=true);
+ const chosen=k>=0?q.opts[k]:null;
+ const ok=chosen===q.correct;
+ // reveal
+ btns.forEach((b,i)=>{if(q.opts[i]===q.correct)b.classList.add("ok");else if(i===k)b.classList.add("bad");});
+ // stats
+ S.answered++;Q.answeredCount++;
+ S.catStats[q.c]=S.catStats[q.c]||{a:0,c:0};S.catStats[q.c].a++;
+ if(ok){
+   S.correct++;S.catStats[q.c].c++;Q.right++;Q.combo++;S.bestCombo=Math.max(S.bestCombo,Q.combo);Q._maxCombo=Math.max(Q._maxCombo||0,Q.combo);
+   let base=[0,10,14,18,24][q.d]||12;
+   if(Q._bonus)base*=2;
+   let gain=base+combBonus();
+   if(Q.daily)gain*=2;
+   Q.xp+=gain;let c=Math.round(gain/3)+ (Q._bonus?15:0);Q.coins+=c;
+   SFX.right();if(Q.combo>=3){confetti(12);}
+   if(Q.teams)Q.teamScores[Q.turn]+=gain;
+ }else{
+   Q.combo=0;
+   S.wrongIds=S.wrongIds||[];if(!S.wrongIds.includes(q.idx))S.wrongIds.push(q.idx);
+   SFX.wrong();
+   if(Q.lives){Q.lives--;const av=el("app");}
+ }
+ save();checkBadges();
+ // explanation
+ const exp=document.createElement("div");exp.className="explain";
+ exp.innerHTML=`
+   <div class="row"><span style="font-size:22px">${ok?"✅":"❌"}</span><b>${ok?t('correct'):(k<0?"⏰ Tijd voorbij":t('wrong'))}</b></div>
+   ${!ok?`<div class="mt8" style="font-size:14px">Juiste antwoord: <b>${esc(q.correct)}</b></div>`:""}
+   <div class="mt8" style="font-size:14.5px">${esc(q.e)}</div>
+   <div class="src">📚 <b>${t('source')}:</b> ${esc(q.s)}</div>
+   ${q.m?`<div class="madh">🏛️ <b>${t('madhahib')}:</b> ${esc(q.m)}</div>`:""}
+ `;
+ el("app").querySelector(".qcard").after(exp);
+ const hb=el("app").querySelector(".btn.ghost");if(hb)hb.style.display="none";
+ // next button
+ const nb=document.createElement("button");nb.className="btn mt";
+ const done=(Q.mode==="endless")?(Q.lives<=0):(Q.i>=Q.list.length-1);
+ nb.textContent=done?"🏁 "+t('finish'):t('next')+" →";
+ nb.onclick=()=>nextQ();
+ exp.after(nb);
+ if(Q.lives!==undefined&&Q.lives<=0&&Q.mode==="endless"){/* end after */}
+ exp.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function nextQ(){
+ SFX.tap();
+ // team turn rotation
+ if(Q.teams){Q.turn=(Q.turn+1)%Q.teams.length;}
+ if(Q.mode==="endless"){if(Q.lives<=0){return finishQuiz();}Q.i++;return renderQuiz();}
+ if(Q.i>=Q.list.length-1)return finishQuiz();
+ Q.i++;renderQuiz();
+}
+function quitQuiz(){modal(`<div class="center"><h2 class="serif">Stoppen?</h2><p class="sub mt8">Je voortgang in deze quiz gaat verloren.</p><div class="grid2 mt"><button class="btn ghost" onclick="closeModal()">Verder spelen</button><button class="btn" onclick="closeModal();go('home')">Stoppen</button></div></div>`);}
+/* ================= RESULTS ================= */
+function finishQuiz(){
+ clearTimeout(Q._to);cancelAnimationFrame(timerRAF);
+ addXp(Q.xp);addCoins(Q.coins);
+ const total=Q.mode==="endless"?Q.answeredCount:Q.list.length;
+ const pct=total?Math.round(Q.right/total*100):0;
+ const stars=pct>=90?3:pct>=60?2:pct>=30?1:0;
+ if(Q.daily){S.dailyDate=todayStr();}
+ if(pct===100&&Q.mode!=="endless"&&total>=10)grant("perfect");
+ if(Q.mode==="ramadan")grant("ramadan");
+ save();
+ if(stars===3){confetti(40);SFX.level();}else if(stars>0){confetti(16);}
+ // team result
+ let teamBlock="";
+ if(Q.teams){
+   const max=Math.max(...Q.teamScores);const winners=Q.teams.filter((_,i)=>Q.teamScores[i]===max);
+   teamBlock=`<div class="card mt" style="background:linear-gradient(150deg,var(--pine),var(--green));color:#F6F1E2;border:none">
+     <div class="center"><div style="font-size:40px">🏆</div><h2 class="serif">${winners.join(" & ")} wint!</h2></div>
+     ${Q.teams.map((tn,i)=>`<div class="spread" style="padding:6px 2px"><b>${tn}</b><span class="chip gold">${Q.teamScores[i]} XP</span></div>`).join("")}
+   </div>`;
+ }
+ el("app").innerHTML=`
+   <div class="card center mt" style="padding-top:22px">
+     <div class="eyebrow">${Q.label}</div>
+     <div class="stars">${"⭐".repeat(stars)}${"☆".repeat(3-stars)}</div>
+     <h2 class="serif">${pct>=90?"MashaAllah! Uitstekend!":pct>=60?"Goed gedaan!":pct>=30?"Blijf oefenen!":"Volgende keer beter!"}</h2>
+     <div class="bigxp mt8">+${Q.xp} XP</div>
+     <div class="sub">${Q.right}/${total} goed · ${pct}%</div>
+   </div>
+   ${teamBlock}
+   <div class="card mt">
+     <div class="rewrow"><span>✅ Goede antwoorden</span><b>${Q.right}/${total}</b></div>
+     <div class="rewrow"><span>⚡ Beste reeks deze ronde</span><b>${Q._maxCombo||S.bestCombo}</b></div>
+     <div class="rewrow"><span>🪙 Munten verdiend</span><b>+${Q.coins}</b></div>
+     <div class="rewrow"><span>🏅 Huidig level</span><b>${S.level}</b></div>
+     ${Q.daily?`<div class="rewrow"><span>📆 Dagelijkse bonus</span><b>2× XP ✓</b></div>`:""}
+   </div>
+   <div class="grid2 mt">
+     <button class="btn ghost" onclick="go('home')">🏠 ${t('back')}</button>
+     <button class="btn" onclick="startQuiz({mode:'${Q.mode==='endless'?'endless':'solo'}',cat:'${Q.cat||'mix'}',diff:${Q.diff||0},count:10,${Q.lives?'lives:3,':''}label:'Opnieuw'})">🔄 Opnieuw</button>
+   </div>
+   ${Q.right<total?`<button class="btn gold mt" onclick="startReview()">🔁 Herhaal foute vragen</button>`:""}
+ `;
+ Q=null;
+}
+
+/* ================= TEAM / 1v1 / FAMILY SETUP ================= */
+function openTeamSetup(mode){
+ const presets={"1v1":["Speler 1","Speler 2"],team:["Team Groen","Team Goud"],family:["Ouders","Kinderen"]};
+ const names=presets[mode];
+ modal(`<div class="spread"><h2 class="serif">${mode==='1v1'?'⚔️ 1 tegen 1':mode==='team'?'👥 Teammodus':'👨‍👩‍👧 Familiequiz'}</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <p class="sub mt8">Geef de deelnemers een naam. Om de beurt beantwoordt iedereen een vraag op hetzelfde apparaat.</p>
+   <div class="mt"><label class="sub">Naam 1</label><input type="text" id="tn1" value="${names[0]}"></div>
+   <div class="mt8"><label class="sub">Naam 2</label><input type="text" id="tn2" value="${names[1]}"></div>
+   <div class="mt"><b class="sub">Aantal vragen</b>
+     <div class="grid3 mt8">
+       <button class="btn small ghost" onclick="teamStart('${mode}',6)">6</button>
+       <button class="btn small" onclick="teamStart('${mode}',10)">10</button>
+       <button class="btn small ghost" onclick="teamStart('${mode}',14)">14</button>
+     </div>
+   </div>`);
+}
+function teamStart(mode,count){
+ const a=(el("tn1").value||"Team 1").slice(0,16),b=(el("tn2").value||"Team 2").slice(0,16);
+ closeModal();
+ startQuiz({mode:mode,cat:"mix",diff:0,count:count,teams:[a,b],label:mode==='1v1'?'⚔️ 1 tegen 1':mode==='family'?'👨‍👩‍👧 Familiequiz':'👥 Teammodus'});
+}
+
+/* ================= FRIENDS CHALLENGE ================= */
+function openFriendsChallenge(){
+ modal(`<div class="spread"><h2 class="serif">🤝 Vrienden uitdagen</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <p class="sub mt8">Kies een vriend. Jij speelt eerst; daarna deel je de uitdaging.</p>
+   <div class="mt" style="display:flex;flex-direction:column;gap:8px">
+     ${S.friends.map(f=>`<button class="opt" onclick="closeModal();startFriendChallenge('${esc(f.n)}')"><div class="avatar" style="width:34px;height:34px;font-size:17px;border-width:1.5px">${f.a}</div><span>${esc(f.n)}</span></button>`).join("")}
+   </div>
+   <button class="btn ghost mt" onclick="addFriend()">➕ Nieuwe vriend</button>`);
+}
+function startFriendChallenge(name){
+ startQuiz({mode:"friends",cat:"mix",diff:0,count:10,label:"🤝 Uitdaging vs "+name});
+ Q._friend=name;
+}
+function challengeFriend(name){go('home');setTimeout(()=>startFriendChallenge(name),80);}
+function addFriend(){
+ modal(`<div class="spread"><h2 class="serif">➕ Vriend toevoegen</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <p class="sub mt8">Voer de gebruikersnaam of vriendcode in.</p>
+   <input type="text" id="fname" placeholder="bv. Ahmad of #ILM-3948" class="mt">
+   <button class="btn mt" onclick="doAddFriend()">Toevoegen</button>`);
+}
+function doAddFriend(){
+ const v=(el("fname").value||"").trim();if(!v){toast("Vul een naam in");return;}
+ const avs=["😀","🌙","⭐","🕌","📿","🐪"];
+ S.friends.unshift({n:v.replace(/^#/,''),xp:Math.floor(500+Math.random()*4000),a:avs[(Math.random()*avs.length)|0]});save();
+ closeModal();toast("✅ "+v+" toegevoegd");if(CUR==="profile")render();
+}
+/* ================= WHEEL OF FORTUNE ================= */
+const WHEEL=[{t:"+30 🪙",c:30,x:0},{t:"+15 XP",c:0,x:15},{t:"+50 🪙",c:50,x:0},{t:"🎁 Avatar",av:1},
+             {t:"+20 XP",c:0,x:20},{t:"+10 🪙",c:10,x:0},{t:"+100 🪙",c:100,x:0},{t:"+40 XP",c:0,x:40}];
+let wheelSpinning=false;
+function openWheel(){
+ const free=S.wheelDate!==todayStr();
+ const cost=free?0:40;
+ modal(`<div class="spread"><h2 class="serif">🎡 Rad van Fortuin</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <p class="sub mt8">${free?"Je hebt een <b>gratis</b> draai vandaag!":"Extra draai kost 40 🪙"}</p>
+   <div class="wheelwrap">
+     <div class="pointer">▼</div>
+     <div class="wheel" id="wheelEl">
+       ${WHEEL.map((w,i)=>`<div class="wl" style="transform:rotate(${i*45+22.5}deg) translate(0,-118px) rotate(${-(i*45+22.5)}deg)">${w.t.split(' ')[0]}</div>`).join("")}
+     </div>
+     <div class="hub">🕌</div>
+   </div>
+   <button class="btn gold" id="spinBtn" onclick="spinWheel(${cost})">${free?"Gratis draaien":"Draai (40 🪙)"}</button>`);
+}
+function spinWheel(cost){
+ if(wheelSpinning)return;
+ if(cost>0&&S.coins<cost){toast("Niet genoeg munten");return;}
+ if(cost>0)addCoins(-cost);
+ wheelSpinning=true;el("spinBtn").disabled=true;SFX.spin();grant("wheel");
+ const idx=(Math.random()*WHEEL.length)|0;
+ const turns=5;const target=turns*360 + (360-(idx*45+22.5));
+ const w=el("wheelEl");w.style.transform=`rotate(${target}deg)`;
+ setTimeout(()=>{
+   const prize=WHEEL[idx];
+   if(prize.x)addXp(prize.x);
+   if(prize.c)addCoins(prize.c);
+   if(prize.av){const pool=AVATARS.filter(a=>!S.ownedAv.includes(a));if(pool.length){const na=pool[0];S.ownedAv.push(na);save();}}
+   S.wheelDate=todayStr();save();
+   confetti(30);SFX.coin();
+   modal(`<div class="center"><div style="font-size:56px">🎉</div><h2 class="serif">Gewonnen!</h2><div class="chip gold mt" style="font-size:16px;padding:10px 18px">${prize.t}</div><button class="btn mt" onclick="closeModal();if(CUR==='home')render()">Top!</button></div>`);
+   wheelSpinning=false;
+ },4300);
+}
+
+/* ================= MYSTERY BOX ================= */
+function openMysteryBox(){
+ if(S.coins<60){toast("Niet genoeg munten");return;}
+ addCoins(-60);SFX.tap();
+ modal(`<div class="center"><div id="boxEm" style="font-size:70px" class="shake">🎁</div><h2 class="serif mt8">Openen…</h2></div>`);
+ setTimeout(()=>{
+   const pool=AVATARS.filter(a=>!S.ownedAv.includes(a));
+   let reward,rt;
+   if(pool.length&&Math.random()<0.7){reward=pool[(Math.random()*pool.length)|0];S.ownedAv.push(reward);rt=`Nieuwe avatar: <span style="font-size:26px">${reward}</span>`;}
+   else{const c=[40,60,80][(Math.random()*3)|0];addCoins(c);rt=`+${c} 🪙 munten`;}
+   save();confetti(28);SFX.coin();
+   modal(`<div class="center"><div style="font-size:64px">✨</div><h2 class="serif">Mystery Box</h2><div class="chip gold mt" style="font-size:15px;padding:10px 16px">${rt}</div><p class="sub mt8">Stel je nieuwe avatar in via je profiel.</p><button class="btn mt" onclick="closeModal()">Sluiten</button></div>`);
+ },900);
+}
+
+/* ================= AVATAR PICKER ================= */
+function openAvatar(){
+ modal(`<div class="spread"><h2 class="serif">Kies je avatar</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <p class="sub mt8">Ontgrendel meer via het Rad van Fortuin en Mystery Boxes.</p>
+   <div class="avpick mt">
+     ${AVATARS.map(a=>{const owned=S.ownedAv.includes(a);
+       return `<div class="av ${S.avatar===a?'sel':''} ${owned?'':'lockedav'}" onclick="${owned?`setAvatar('${a}')`:`toast('🔒 Nog niet ontgrendeld')`}">${a}</div>`;}).join("")}
+   </div>`);
+}
+function setAvatar(a){S.avatar=a;save();SFX.tap();closeModal();render();}
+function editName(){
+ modal(`<div class="spread"><h2 class="serif">Naam wijzigen</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <input type="text" id="nn" value="${esc(S.name)}" maxlength="16" class="mt">
+   <button class="btn mt" onclick="S.name=(el('nn').value||'Speler').slice(0,16);save();closeModal();render();toast('✅ Opgeslagen')">Opslaan</button>`);
+}
+
+/* ================= SETTINGS ================= */
+function openSettings(){
+ modal(`<div class="spread"><h2 class="serif">⚙️ Instellingen</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
+   <div class="mt">
+     <div class="switchrow"><span>🌙 Donkere modus</span><div class="sw ${S.theme==='dark'?'on':''}" onclick="toggle('theme')"><i></i></div></div>
+     <div class="switchrow"><span>🔊 Geluidseffecten</span><div class="sw ${S.sound?'on':''}" onclick="toggle('sound')"><i></i></div></div>
+     <div class="switchrow"><span>🔔 Pushnotificaties</span><div class="sw ${S.notif?'on':''}" onclick="toggle('notif')"><i></i></div></div>
+   </div>
+   <div class="mt"><b class="sub">🌐 Taal</b>
+     <div class="grid3 mt8">
+       <button class="btn small ${S.lang==='nl'?'':'ghost'}" onclick="setLang('nl')">Nederlands</button>
+       <button class="btn small ${S.lang==='en'?'':'ghost'}" onclick="setLang('en')">English</button>
+       <button class="btn small ${S.lang==='ar'?'':'ghost'}" onclick="setLang('ar')">العربية</button>
+     </div>
+   </div>
+   <div class="hr"></div>
+   <div class="switchrow" style="border:none"><span>📴 Offline modus</span><span class="chip">Actief ✓</span></div>
+   <p class="sub">Deze app werkt volledig offline — alle vragen zitten in de app.</p>
+   <button class="btn ghost mt" onclick="if(confirm('Alle voortgang wissen?')){localStorage.removeItem('ilmquest');location.reload();}">🗑️ Voortgang wissen</button>
+   <p class="center sub mt">Ilm Quest · v1.0 · Kennis is licht (nur) 🕯️</p>`);
+}
+function toggle(k){
+ if(k==='theme'){S.theme=(S.theme==='dark')?'light':'dark';}
+ else{S[k]=!S[k];}
+ save();applyTheme();openSettings();
+ if(k==='sound'&&S.sound)SFX.tap();
+}
+function setLang(l){S.lang=l;save();applyTheme();closeModal();render();toast(l==='ar'?"تم":"✓");}
+function setTheme(){}
+
+/* ================= INIT ================= */
+function init(){
+ // migrate theme value if boolean
+ if(typeof S.theme!=="string")S.theme=S.theme?"dark":"light";
+ S.level=levelFromXp(S.xp);save();
+ applyTheme();
+ el("nav").style.display="flex";
+ el("nb-home").className="on";
+ // welcome for new users
+ if(!S.seen){
+   S.seen=true;save();
+   modal(`<div class="center">
+     <div style="font-size:56px">🕌</div>
+     <h2 class="serif mt8">Welkom bij Ilm Quest</h2>
+     <p class="sub mt8" style="text-align:left">Een speelse quiz over de islam — voor kinderen, jongeren én volwassenen.</p>
+     <div class="card mt" style="text-align:left;box-shadow:none">
+       <div style="font-size:14px">📖 <b>Authentieke bronnen</b> — Qur'an & Sahih ahadith</div>
+       <div style="font-size:14px" class="mt8">🏛️ <b>Vier wetscholen</b> — verschillen neutraal getoond</div>
+       <div style="font-size:14px" class="mt8">🎮 <b>XP, levels, badges</b> — leren wordt leuk</div>
+     </div>
+     <div class="mt"><label class="sub">Hoe mogen we je noemen?</label><input type="text" id="wn" placeholder="Jouw naam" maxlength="16"></div>
+     <button class="btn gold mt" onclick="S.name=(el('wn').value||'Speler').slice(0,16);save();closeModal();render();confetti(20);">Bismillah, start! ▶️</button>
+   </div>`);
+ }
+ render();
+}
+window.addEventListener("DOMContentLoaded",init);
+if(document.readyState!=="loading")init();
+</script>
+</body>
+</html>
