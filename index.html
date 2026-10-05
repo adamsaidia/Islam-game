@@ -128,16 +128,7 @@ h1,h2,h3,.serif{font-family:Georgia,"Palatino Linotype",Palatino,serif;letter-sp
 .lbrow .rank{width:30px;font-weight:800;color:var(--sub)}
 .lbrow.me{background:var(--mint);border-radius:12px}
 
-/* wheel */
-.wheelwrap{position:relative;width:270px;height:270px;margin:14px auto}
-.wheel{width:100%;height:100%;border-radius:50%;border:8px solid var(--gold);position:relative;
-  transition:transform 4.2s cubic-bezier(.12,.75,.18,1);
-  background:conic-gradient(var(--green) 0 45deg,var(--card2) 45deg 90deg,var(--green2) 90deg 135deg,var(--gold2) 135deg 180deg,
-  var(--green) 180deg 225deg,var(--card2) 225deg 270deg,var(--green2) 270deg 315deg,var(--gold2) 315deg 360deg)}
-.wl{position:absolute;left:50%;top:50%;font-size:17px;transform-origin:0 0}
-.pointer{position:absolute;top:-6px;left:50%;transform:translateX(-50%);font-size:28px;z-index:2;color:var(--red)}
-.hub{position:absolute;inset:0;margin:auto;width:56px;height:56px;border-radius:50%;background:var(--card);
-  border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px}
+
 
 /* nav */
 nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:470px;
@@ -472,7 +463,6 @@ const BADGES=[
  {id:"explorer",i:"🧭",n:"Ontdekker",d:"Speel 8 verschillende categorieën",chk:s=>Object.values(s.catStats).filter(x=>x.a>0).length>=8},
  {id:"perfect",i:"💯",n:"Perfecte ronde",d:"10/10 in een quiz",chk:()=>false},
  {id:"ramadan",i:"🌙",n:"Ster van Ramadan",d:"Speel de Ramadan-modus",chk:()=>false},
- {id:"wheel",i:"🎡",n:"Gelukzoeker",d:"Draai aan het Rad van Fortuin",chk:()=>false},
 ];
 function grant(id){if(!S.badges.includes(id)){S.badges.push(id);save();const b=BADGES.find(x=>x.id===id);if(b){confetti(24);toast("🎖️ Badge: "+b.n);}}}
 function checkBadges(){BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.chk(S))grant(b.id);});}
@@ -530,12 +520,6 @@ function viewHome(){
    ${modeTile("friends","🤝","Vrienden uitdagen","Verstuur een uitdaging")}
  </div>
 
- <div class="card mt">
-   <div class="spread">
-     <div class="row"><span style="font-size:26px">🎡</span><div><b>Rad van Fortuin</b><div class="sub">${S.wheelDate!==todayStr()?"Gratis draai beschikbaar":"Volgende gratis draai morgen"}</div></div></div>
-     <button class="btn small gold" onclick="openWheel()">Draai</button>
-   </div>
- </div>
  <div class="card mt8">
    <div class="spread">
      <div class="row"><span style="font-size:26px">🎁</span><div><b>Mystery Box</b><div class="sub">Cosmetische avatar · 60 🪙</div></div></div>
@@ -901,44 +885,6 @@ function doAddFriend(){
  S.friends.unshift({n:v.replace(/^#/,''),xp:Math.floor(500+Math.random()*4000),a:avs[(Math.random()*avs.length)|0]});save();
  closeModal();toast("✅ "+v+" toegevoegd");if(CUR==="profile")render();
 }
-/* ================= WHEEL OF FORTUNE ================= */
-const WHEEL=[{t:"+30 🪙",c:30,x:0},{t:"+15 XP",c:0,x:15},{t:"+50 🪙",c:50,x:0},{t:"🎁 Avatar",av:1},
-             {t:"+20 XP",c:0,x:20},{t:"+10 🪙",c:10,x:0},{t:"+100 🪙",c:100,x:0},{t:"+40 XP",c:0,x:40}];
-let wheelSpinning=false;
-function openWheel(){
- const free=S.wheelDate!==todayStr();
- const cost=free?0:40;
- modal(`<div class="spread"><h2 class="serif">🎡 Rad van Fortuin</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
-   <p class="sub mt8">${free?"Je hebt een <b>gratis</b> draai vandaag!":"Extra draai kost 40 🪙"}</p>
-   <div class="wheelwrap">
-     <div class="pointer">▼</div>
-     <div class="wheel" id="wheelEl">
-       ${WHEEL.map((w,i)=>`<div class="wl" style="transform:rotate(${i*45+22.5}deg) translate(0,-118px) rotate(${-(i*45+22.5)}deg)">${w.t.split(' ')[0]}</div>`).join("")}
-     </div>
-     <div class="hub">🕌</div>
-   </div>
-   <button class="btn gold" id="spinBtn" onclick="spinWheel(${cost})">${free?"Gratis draaien":"Draai (40 🪙)"}</button>`);
-}
-function spinWheel(cost){
- if(wheelSpinning)return;
- if(cost>0&&S.coins<cost){toast("Niet genoeg munten");return;}
- if(cost>0)addCoins(-cost);
- wheelSpinning=true;el("spinBtn").disabled=true;SFX.spin();grant("wheel");
- const idx=(Math.random()*WHEEL.length)|0;
- const turns=5;const target=turns*360 + (360-(idx*45+22.5));
- const w=el("wheelEl");w.style.transform=`rotate(${target}deg)`;
- setTimeout(()=>{
-   const prize=WHEEL[idx];
-   if(prize.x)addXp(prize.x);
-   if(prize.c)addCoins(prize.c);
-   if(prize.av){const pool=AVATARS.filter(a=>!S.ownedAv.includes(a));if(pool.length){const na=pool[0];S.ownedAv.push(na);save();}}
-   S.wheelDate=todayStr();save();
-   confetti(30);SFX.coin();
-   modal(`<div class="center"><div style="font-size:56px">🎉</div><h2 class="serif">Gewonnen!</h2><div class="chip gold mt" style="font-size:16px;padding:10px 18px">${prize.t}</div><button class="btn mt" onclick="closeModal();if(CUR==='home')render()">Top!</button></div>`);
-   wheelSpinning=false;
- },4300);
-}
-
 /* ================= MYSTERY BOX ================= */
 function openMysteryBox(){
  if(S.coins<60){toast("Niet genoeg munten");return;}
@@ -957,7 +903,7 @@ function openMysteryBox(){
 /* ================= AVATAR PICKER ================= */
 function openAvatar(){
  modal(`<div class="spread"><h2 class="serif">Kies je avatar</h2><button class="btn small ghost" onclick="closeModal()">✕</button></div>
-   <p class="sub mt8">Ontgrendel meer via het Rad van Fortuin en Mystery Boxes.</p>
+   <p class="sub mt8">Ontgrendel meer via Mystery Boxes.</p>
    <div class="avpick mt">
      ${AVATARS.map(a=>{const owned=S.ownedAv.includes(a);
        return `<div class="av ${S.avatar===a?'sel':''} ${owned?'':'lockedav'}" onclick="${owned?`setAvatar('${a}')`:`toast('🔒 Nog niet ontgrendeld')`}">${a}</div>`;}).join("")}
