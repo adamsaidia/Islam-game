@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="112" fill="#0f5c46"/>
+  <g fill="none" stroke="#d9b75e" stroke-width="10" opacity=".55">
+    <path d="M256 70l52 126 126 52-126 52-52 126-52-126-126-52 126-52z"/>
+  </g>
+  <text x="256" y="300" text-anchor="middle" font-family="Noto Naskh Arabic, Geeza Pro, serif" font-size="250" fill="#fffdf8">ع</text>
+</svg>
