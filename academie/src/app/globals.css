@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f7f3ea;
+  --surface: #fffdf8;
+  --surface-2: #f0eadc;
+  --ink: #1d2a25;
+  --muted: #66746d;
+  --line: #e4dccb;
+  --primary: #0f5c46;
+  --primary-ink: #ffffff;
+  --primary-soft: #dcefe6;
+  --gold: #b28a2e;
+  --gold-soft: #f4e9cc;
+  --danger: #b4442f;
+  --danger-soft: #f8e1db;
+  --ok: #2c7a4b;
+  --ok-soft: #dff1e5;
+  --warn: #a86a12;
+  --warn-soft: #fbecd2;
+}
+.dark {
+  --bg: #0c1411;
+  --surface: #121d19;
+  --surface-2: #18261f;
+  --ink: #ece6d8;
+  --muted: #97a69e;
+  --line: #24352d;
+  --primary: #3fb38c;
+  --primary-ink: #06130e;
+  --primary-soft: #143329;
+  --gold: #d9b75e;
+  --gold-soft: #2e2715;
+  --danger: #e57a62;
+  --danger-soft: #3a1d17;
+  --ok: #5ccf8d;
+  --ok-soft: #12301f;
+  --warn: #e3a64a;
+  --warn-soft: #33260f;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-primary: var(--primary);
+  --color-primary-ink: var(--primary-ink);
+  --color-primary-soft: var(--primary-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-arabic: var(--font-naskh), "Geeza Pro", "Noto Naskh Arabic", "Traditional Arabic", serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+/* Arabische tekst: ruime regelhoogte zodat harakat niet botsen. */
+.ar {
+  font-family: var(--font-naskh), "Geeza Pro", "Noto Naskh Arabic", "Traditional Arabic", serif;
+  direction: rtl;
+  unicode-bidi: isolate;
+  --tw-leading: 2;
+  line-height: 2;
+  font-feature-settings: "kern", "liga", "calt";
+}
+}
+
+.fade-in {
+  animation: fade-in 0.35s ease both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
