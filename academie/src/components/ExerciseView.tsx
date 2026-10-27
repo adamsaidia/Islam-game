@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import { Check, X, Mic, Square, Sparkles, RotateCcw, Eye } from "lucide-react";
+import { Check, X, Mic, Square, Sparkles, RotateCcw, Eye, Circle } from "lucide-react";
 import type { Exercise } from "@/content/types";
-import { checkArabic, compareSpoken, diffLetters, hasArabic, type CheckResult } from "@/lib/arabic";
+import { checkArabic, checkEnding, compareSpoken, diffLetters, hasArabic, type CheckResult } from "@/lib/arabic";
 import { hashString, seeded, shuffle } from "@/lib/random";
-import { useSpeechRecognition } from "@/lib/speech";
+import { useRecorder, useSpeechRecognition } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { callAi, fetchAiStatus, AiError } from "@/lib/ai/client";
 import type { JudgeResult } from "@/lib/ai/schemas";
@@ -176,7 +176,7 @@ function TypeIt({ e, finish }: { e: Extract<Exercise, { kind: "type" }>; finish:
       setRes({ correct: ok, verdict: ok ? "correct" : "wrong", message: ok ? "Goed!" : "Nog niet goed.", expected: e.answers[0] });
       return;
     }
-    setRes(checkArabic(value, e.answers, e.requireHarakat));
+    setRes(e.checkEnding ? checkEnding(value, e.answers[0]) : checkArabic(value, e.answers, e.requireHarakat));
   };
 
   const askAi = async () => {
@@ -190,7 +190,7 @@ function TypeIt({ e, finish }: { e: Extract<Exercise, { kind: "type" }>; finish:
     }
   };
 
-  const canAskAi = res && !res.correct && aiConfigured && aiLevel !== "off" && !e.requireHarakat && !e.audio && (e.skill === "writing" || e.skill === "grammar" || e.skill === "vocabulary");
+  const canAskAi = res && !res.correct && aiConfigured && aiLevel !== "off" && !e.requireHarakat && !e.checkEnding && !e.audio && (e.skill === "writing" || e.skill === "grammar" || e.skill === "vocabulary");
   const finalCorrect = (res?.correct ?? false) || aiOk;
 
   return (
@@ -222,7 +222,7 @@ function TypeIt({ e, finish }: { e: Extract<Exercise, { kind: "type" }>; finish:
             {!res.correct && !e.dutch && (
               <div className="mt-2 space-y-1">
                 <p className="text-xs text-muted">Modelantwoord:</p>
-                <Ar text={res.expected} size="lg" force={e.requireHarakat ? "full" : undefined} />
+                <Ar text={res.expected} size="lg" force={e.requireHarakat || e.checkEnding ? "full" : undefined} />
                 <p className="text-xs text-muted">Jouw letters vergeleken (groen = juist, rood = ontbreekt of anders):</p>
                 <p className="ar text-2xl" dir="rtl">
                   {diffLetters(value, res.expected).map((d, i) => (
@@ -461,6 +461,7 @@ function Speak({ e, finish }: { e: Extract<Exercise, { kind: "speak" }>; finish:
           {stt.error && <p className="text-sm text-danger">{stt.error}</p>}
         </div>
       )}
+      <SelfRecord text={e.text} />
       {result && (
         <Feedback ok={result.score >= 0.75} almost={result.score >= 0.4 && result.score < 0.75}>
           <p>Herkend: <bdi className="ar text-lg">{stt.transcript}</bdi></p>
@@ -492,6 +493,23 @@ function Speak({ e, finish }: { e: Extract<Exercise, { kind: "speak" }>; finish:
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Neem jezelf op en vergelijk met het voorbeeld (geen beoordeling, alleen terugluisteren). */
+export function SelfRecord({ text }: { text: string }) {
+  const rec = useRecorder();
+  if (!rec.supported) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-dashed border-line p-3 text-sm">
+      <span className="text-muted">Jezelf terugluisteren:</span>
+      <Button size="sm" variant={rec.recording ? "danger" : "outline"} onClick={() => (rec.recording ? rec.stop() : rec.start())}>
+        {rec.recording ? <Square className="h-4 w-4" /> : <Circle className="h-4 w-4 text-danger" />} {rec.recording ? "Stop" : "Neem op"}
+      </Button>
+      {rec.url && <audio src={rec.url} controls className="h-9 max-w-full" />}
+      {rec.url && <AudioButton text={text} label="Voorbeeld" />}
+      {rec.error && <span className="text-danger">{rec.error}</span>}
     </div>
   );
 }

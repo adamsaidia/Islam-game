@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { checkArabic, compareSpoken, partialHarakat, stripHarakat, applyHarakatMode } from "@/lib/arabic";
+import { checkArabic, checkEnding, compareSpoken, partialHarakat, stripHarakat, applyHarakatMode } from "@/lib/arabic";
 import { dailyPlan } from "@/lib/planner";
 import { newCard, review, Rating, familiarity } from "@/lib/srs";
 import { lookup } from "@/content/lexicon";
+import { chunkText } from "@/lib/speech";
 import { TEXTS } from "@/content/texts";
 import { dayKey } from "@/lib/utils";
 
@@ -118,5 +119,23 @@ describe("lexicon", () => {
   it("context-glos gaat voor", () => {
     const t = TEXTS.find((x) => x.id === "huis")!;
     expect(lookup("بَيْتِي.", t.gloss)?.nl).toBe("mijn huis");
+  });
+});
+
+describe("checkEnding", () => {
+  it("alleen de naamvalsuitgang telt", () => {
+    expect(checkEnding("المدرسَ", "الْمُدَرِّسَ").correct).toBe(true);
+    expect(checkEnding("الْمُدَرِّسُ", "الْمُدَرِّسَ").verdict).toBe("almost");
+    expect(checkEnding("المدرس", "الْمُدَرِّسَ").correct).toBe(false);
+  });
+});
+
+describe("voorlezen in stukken", () => {
+  it("knipt lange teksten op zinsgrenzen", () => {
+    const t = "جملة أولى. جملة ثانية؟ " + "كلمة ".repeat(60);
+    const parts = chunkText(t, 100);
+    expect(parts[0]).toBe("جملة أولى.");
+    expect(parts[1]).toBe("جملة ثانية؟");
+    expect(parts.every((p) => p.length <= 100)).toBe(true);
   });
 });

@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { ChevronDown, Lock, RotateCcw } from "lucide-react";
+import { ChevronDown, RotateCcw } from "lucide-react";
 import { LESSONS } from "@/content/lessons";
 import { useStore } from "@/lib/store";
 import { buildSession, promptOf } from "@/lib/pools";
@@ -9,7 +9,6 @@ import { ExerciseSession } from "@/components/ExerciseSession";
 import { Rich } from "@/components/arabic";
 import { Badge, Button, Card, LinkButton, Notice, PageHeader } from "@/components/ui";
 
-const LATER = ["Tweevoud (الْمُثَنَّى)", "Meervouden (klank- en gebroken meervoud)", "Werkwoordvervoeging verleden en tegenwoordige tijd", "Gebiedende wijs (الْأَمْر)", "Idafa (الْإِضَافَة)", "Ontkenning (لَا، مَا، لَمْ، لَنْ، لَيْسَ)", "I'rab: naamvallen (الْإِعْرَاب)", "Woordwortels (الْجَذْر)", "Werkwoordpatronen I–X (الْأَوْزَان)", "Betrekkelijke voornaamwoorden (الَّذِي، الَّتِي)", "Passief en deelwoorden"];
 
 export default function GrammarPage() {
   const lessons = useStore((s) => s.lessons);
@@ -34,7 +33,7 @@ export default function GrammarPage() {
       </PageHeader>
       {practice ? (
         exercises.length === 0 ? (
-          <Notice>Er is nog geen grammaticastof vrijgespeeld. Start eerst een grammaticales (vanaf les 21), of maak de instaptoets.</Notice>
+          <Notice>Er is nog geen grammaticastof vrijgespeeld. Start eerst een les met grammatica, of maak de instaptoets.</Notice>
         ) : done ? (
           <Card className="space-y-3 text-center">
             <p className="font-medium">{done}</p>
@@ -62,7 +61,7 @@ export default function GrammarPage() {
                 <Card key={l.id} className="p-0">
                   <button onClick={() => setOpen(open === l.id ? null : l.id)} className="flex w-full items-center justify-between gap-3 p-4 text-left">
                     <span>
-                      <span className="text-xs text-muted">Les {l.id}</span>
+                      <span className="text-xs text-muted">Les {l.id} · {l.level}</span>
                       <span className="block font-medium">{l.title}</span>
                       <span className="ar block text-lg text-gold">{l.titleAr}</span>
                     </span>
@@ -109,19 +108,6 @@ export default function GrammarPage() {
               );
             })}
           </div>
-          <Card>
-            <h2 className="mb-2 flex items-center gap-2 font-display text-lg font-semibold">
-              <Lock className="h-4 w-4 text-muted" /> Gepland voor A1-verdieping t/m B2
-            </h2>
-            <ul className="grid gap-1 text-sm text-muted sm:grid-cols-2">
-              {LATER.map((t) => (
-                <li key={t}>
-                  <Rich text={t} arClass="text-base" />
-                </li>
-              ))}
-            </ul>
-            <p className="mt-2 text-xs text-muted">Deze onderwerpen zijn nog niet uitgewerkt. Vragen erover kun je wel al aan de AI-docent stellen.</p>
-          </Card>
         </>
       )}
     </div>

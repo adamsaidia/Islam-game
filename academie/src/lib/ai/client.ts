@@ -36,7 +36,7 @@ export function learnerContext(): string {
     .map((m) => `"${m.prompt}" (verwacht: ${m.expected})`);
   return [
     `Moedertaal: Nederlands. Niveau: ${lvl.level}.`,
-    `Behaalde lessen (van 30 beginnerslessen): ${done.join(", ") || "nog geen"}.`,
+    `Behaalde lessen (van 70, A0 t/m C1): ${done.join(", ") || "nog geen"}. Werkniveau: ${lvl.working}.`,
     `Vaardigheden (zwakste eerst): ${skills.join("; ") || "nog onbekend"}.`,
     mistakes.length ? `Recente fouten: ${mistakes.join("; ")}.` : "",
   ]

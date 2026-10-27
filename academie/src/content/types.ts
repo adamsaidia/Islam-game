@@ -53,6 +53,8 @@ export type TypeExercise = Base & {
   kind: "type";
   answers: string[];
   requireHarakat?: boolean;
+  /** Alleen de letters en de laatste klinker (naamvalsuitgang) worden gecontroleerd. */
+  checkEnding?: boolean;
   /** Antwoord is Nederlands (bijv. vertalen naar het Nederlands). */
   dutch?: boolean;
   hint?: string;

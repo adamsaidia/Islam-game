@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeft, Languages, Mic, Repeat, Send, Square, Snail, Flag, MessageSquare } from "lucide-react";
+import { ArrowLeft, Languages, Mic, Repeat, Send, Square, Snail, Flag, MessageSquare, Headphones } from "lucide-react";
 import { SCENARIOS, type Scenario } from "@/content/scenarios";
 import { useStore, type Correction, type Transcript } from "@/lib/store";
 import { speak, useSpeechRecognition } from "@/lib/speech";
@@ -198,13 +198,29 @@ function Conversation({ scenario, onExit }: { scenario: Scenario; onExit: () => 
   const [newWords, setNewWords] = useState<{ ar: string; nl: string }[]>([]);
   const stt = useSpeechRecognition();
   const bottom = useRef<HTMLDivElement>(null);
+  // Handsfree: na het voorlezen gaat de microfoon vanzelf aan en wordt je antwoord automatisch verstuurd.
+  const [handsfree, setHandsfree] = useState(false);
+  const handsfreeRef = useRef(false);
+  handsfreeRef.current = handsfree;
+  const sendRef = useRef<(t: string) => void>(() => {});
+
+  const say = (text: string, rate = settings.ttsRate) =>
+    speak(text, {
+      rate,
+      voiceURI: settings.voiceURI,
+      onEnd: () => {
+        if (handsfreeRef.current) setTimeout(() => stt.start(), 250);
+      },
+    });
 
   useEffect(() => {
-    speak(scenario.opener.ar, { rate: settings.ttsRate, voiceURI: settings.voiceURI });
+    say(scenario.opener.ar);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
-    if (!stt.listening && stt.transcript) setDraft(stt.transcript);
+    if (stt.listening || !stt.transcript) return;
+    if (handsfreeRef.current) sendRef.current(stt.transcript);
+    else setDraft(stt.transcript);
   }, [stt.listening, stt.transcript]);
   useEffect(() => bottom.current?.scrollIntoView({ behavior: "smooth" }), [msgs, busy]);
 
@@ -228,7 +244,7 @@ function Conversation({ scenario, onExit }: { scenario: Scenario; onExit: () => 
         return [...copy, { role: "assistant", ar: r.reply_ar, nl: r.reply_nl }];
       });
       if (r.new_words.length) setNewWords((w) => [...w, ...r.new_words.filter((x) => !w.some((y) => y.ar === x.ar))]);
-      speak(r.reply_ar, { rate: settings.ttsRate, voiceURI: settings.voiceURI });
+      say(r.reply_ar);
     } catch (e) {
       setError(e instanceof AiError ? e.message : "Er ging iets mis.");
       setMsgs(msgs);
@@ -238,7 +254,10 @@ function Conversation({ scenario, onExit }: { scenario: Scenario; onExit: () => 
     }
   };
 
+  sendRef.current = send;
+
   const end = async () => {
+    setHandsfree(false);
     setBusy(true);
     const corrections = msgs.flatMap((m) => m.corrections ?? []);
     let summary: SummaryResult | null = null;
@@ -345,6 +364,21 @@ function Conversation({ scenario, onExit }: { scenario: Scenario; onExit: () => 
           <Button size="sm" variant="outline" disabled={!lastAi} onClick={() => lastAi && speak(lastAi.ar, { rate: 0.55, voiceURI: settings.voiceURI })}>
             <Snail className="h-4 w-4" /> Langzamer
           </Button>
+          {stt.supported && (
+            <Button
+              size="sm"
+              variant={handsfree ? "primary" : "outline"}
+              onClick={() => {
+                const on = !handsfree;
+                setHandsfree(on);
+                if (on && !stt.listening && !busy) stt.start();
+                if (!on) stt.stop();
+              }}
+              title="De microfoon gaat automatisch aan na elk antwoord van de docent, en je antwoord wordt automatisch verstuurd"
+            >
+              <Headphones className="h-4 w-4" /> Handsfree {handsfree ? "aan" : "uit"}
+            </Button>
+          )}
           <Button size="sm" variant={showNl ? "secondary" : "outline"} onClick={() => setShowNl((s) => !s)}>
             <Languages className="h-4 w-4" /> Vertaling
           </Button>

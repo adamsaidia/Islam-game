@@ -154,7 +154,7 @@ export default function SettingsPage() {
               </thead>
               <tbody className="[&_td]:py-2 [&_td]:pr-2 [&_tr]:border-b [&_tr]:border-line/60">
                 <tr>
-                  <td>30 lessen, toetsen, flashcards, planner, leesmodule</td>
+                  <td>70 lessen (A0–C1), toetsen, flashcards, planner, leesmodule</td>
                   <td>In de app zelf</td>
                   <td><Badge tone="ok">gratis</Badge></td>
                   <td>—</td>

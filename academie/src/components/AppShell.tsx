@@ -3,7 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import {
-  Home, BookOpen, Layers, Mic, Menu, PenLine, Headphones, BookText, GraduationCap, CalendarDays, Settings, MessageCircle, ClipboardCheck, Sun, Moon, X,
+  Home, BookOpen, Layers, Mic, Menu, PenLine, Headphones, BookText, GraduationCap, CalendarDays, Settings, MessageCircle, ClipboardCheck, Sun, Moon, X, Award,
 } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -20,6 +20,7 @@ const NAV = [
   { href: "/woorden", label: "Woordenschat", icon: Layers },
   { href: "/docent", label: "AI-docent", icon: MessageCircle },
   { href: "/planner", label: "Planner", icon: CalendarDays },
+  { href: "/toetsen", label: "Toetsen", icon: Award },
   { href: "/instaptoets", label: "Instaptoets", icon: ClipboardCheck },
   { href: "/instellingen", label: "Instellingen", icon: Settings },
 ];

@@ -5,7 +5,7 @@ const { chromium } = createRequire(import.meta.url)("playwright");
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const OUT = process.env.SHOT_DIR;
-const PAGES = ["/", "/instaptoets", "/lessen", "/lessen/1", "/lessen/9", "/lessen/27", "/lezen", "/schrijven", "/luisteren", "/spreken", "/grammatica", "/woorden", "/docent", "/planner", "/instellingen"];
+const PAGES = ["/", "/instaptoets", "/lessen", "/lessen/1", "/lessen/9", "/lessen/27", "/lessen/45", "/lessen/55", "/lessen/62", "/lessen/70", "/toetsen", "/lezen", "/schrijven", "/luisteren", "/spreken", "/grammatica", "/woorden", "/docent", "/planner", "/instellingen"];
 
 const browser = await chromium.launch();
 let failures = 0;

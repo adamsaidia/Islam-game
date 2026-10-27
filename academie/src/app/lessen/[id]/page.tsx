@@ -127,7 +127,7 @@ function LessonView({ lessonId }: { lessonId: number }) {
                         <tr key={r} className="border-b border-line/60">
                           {row.map((c, k) => (
                             <td key={k} className="px-2 py-1.5">
-                              <Rich text={c} force={forceFull} arClass="text-2xl" />
+                              <Rich text={c} force={forceFull} arClass="text-xl sm:text-2xl" />
                             </td>
                           ))}
                         </tr>
@@ -316,7 +316,7 @@ function LessonView({ lessonId }: { lessonId: number }) {
             >
               <RotateCcw className="h-4 w-4" /> Toets opnieuw
             </Button>
-            {passed && lessonId < 30 && (
+            {passed && getLesson(lessonId + 1) && (
               <Button size="lg" onClick={() => router.push(`/lessen/${lessonId + 1}`)}>
                 Volgende les <ArrowRight className="h-4 w-4" />
               </Button>

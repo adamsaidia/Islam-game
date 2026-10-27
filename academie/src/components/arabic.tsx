@@ -63,6 +63,7 @@ export function AudioButton({ text, className, label, rate }: { text: string; cl
         if (!ok) setPlaying(false);
         setTimeout(() => setPlaying(false), 15000);
       }}
+      aria-label={label || "Voorlezen"}
       title={!supported ? "Voorlezen wordt niet ondersteund in deze browser" : noVoice ? "Geen Arabische stem gevonden op dit apparaat; de uitspraak kan onjuist zijn" : "Voorlezen"}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1.5 text-sm text-primary transition hover:bg-primary-soft",

@@ -3,24 +3,32 @@
 Een webapp (PWA) om zelfstandig **Modern Standaardarabisch** te leren, met Nederlands als instructietaal.
 Nadruk op zelf produceren: spreken, schrijven en lezen zonder harakat.
 
-## Wat werkt er nu (fase 1 + 2, deels 3 en 4)
+## Wat werkt er nu
 
 | Onderdeel | Status |
 |---|---|
-| **30 uitgewerkte beginnerslessen** (A0–A1): alfabet, uitspraak, verbindingen, harakat, sukun, shadda, tanween, hamza/ة/ى/ال, begroeten, kennismaken, familie, getallen, huis, eten, voornaamwoorden, geslacht, bepaald/onbepaald, naamwoordzin, vraagwoorden, bezittelijke uitgangen, voorzetsels, luisteren, gesprek, eindtoets | ✅ |
-| Elke les: leerdoel, uitleg, voorbeelden, oefeningen, feedback, eindtoets (behaald bij ≥ 80%) | ✅ |
-| Oefenvormen: meerkeuze, typen in het Arabisch, dictee, zinnen bouwen, koppelen, naschrijven, hardop spreken | ✅ |
-| Instaptoets met 8 aparte vaardigheden → persoonlijk startpunt | ✅ |
+| **70 uitgewerkte lessen, A0 t/m C1**, elk met leerdoel, uitleg, voorbeelden, oefeningen, feedback en eindtoets (behaald bij ≥ 80%) | ✅ |
+| A0 (1–14): alfabet, verbindingen, harakat, sukun, shadda, tanween, hamza/ة/ى/ال | ✅ |
+| A1 (15–40): basiswoordenschat, voornaamwoorden, naamwoordzin, voorzetsels, tegenwoordige en verleden tijd, ontkenning, meervoud, idafa, getallen tot 100, tijd, kleuren | ✅ |
+| A2 (41–50): toekomst, gebiedende wijs, أَنْ + werkwoord, boodschappen, de weg vragen, tweevoud, vergelijken, betrekkelijke zinnen, gezondheid | ✅ |
+| B1 (51–58): woordwortels, werkwoordsvormen II–X, deelwoorden en masdar, i'rab, werk, nieuws lezen | ✅ |
+| B2 (59–64): lijdende vorm, voorwaardelijke zinnen, verbindingswoorden, mening geven, ḥāl | ✅ |
+| C1 (65–70): academisch schrijven (Fuṣḥā vs. dialect), retoriek, spreekwoorden en poëzie, discussie, lange teksten zonder harakat | ✅ |
+| Niveautoets aan het eind van elk niveau (les 30, 40, 50, 58, 64, 70) | ✅ |
+| Instaptoets met 9 onderdelen → persoonlijk startpunt | ✅ |
+| Toetsenpagina: wekelijkse voortgangstoets, niveau-evaluaties, toetsgeschiedenis per vaardigheid | ✅ |
 | Voortgang, fouten, toetsresultaten en hervatten (lokaal opgeslagen) | ✅ |
 | Dashboard, dagelijkse planner (20/30/45/60 min, studiedagen, weekoverzicht, inhalen) | ✅ |
 | Flashcards met FSRS (herkennen én zelf schrijven), persoonlijk woordenboek | ✅ |
-| Leesmodule in 5 fasen, harakat aan/deels/uit, klikbare woorden, hardop lezen | ✅ |
-| Schrijfbord (vinger/muis/stylus) met eerlijke vormvergelijking, Arabisch toetsenbord | ✅ |
+| Leesmodule in 5 fasen met 18 teksten; harakat aan/deels/uit, klikbare woorden, hardop lezen | ✅ |
+| Schrijfbord met eerlijke vormvergelijking, Arabisch toetsenbord, naamvalsoefeningen | ✅ |
 | Luistermodule met snelheid, transcript, vertaling, luisterdictee | ✅ |
+| Spraak: jezelf opnemen en terugluisteren, handsfree gesprekken, lange teksten betrouwbaar voorlezen | ✅ |
 | AI-spreektrainer (11 scenario's), AI-docent, AI-schrijfcorrectie | ✅ code klaar — **werkt pas met `ANTHROPIC_API_KEY`** |
 | Supabase-login en synchronisatie | ✅ code klaar — **werkt pas met Supabase-gegevens** |
 | PWA (installeerbaar, offline voor bezochte pagina's), licht/donker, mobiel | ✅ |
-| Lessen A1-verdieping, A2, B1, B2, C1 | ⏳ gepland, zichtbaar als "in ontwikkeling" |
+| GitHub Actions: typecheck, tests en build bij elke wijziging | ✅ |
+| Dialectmodules en verdieping na C1 | ⏳ gepland, zichtbaar als "in ontwikkeling" |
 
 ### Eerlijke beperkingen
 
@@ -28,6 +36,7 @@ Nadruk op zelf produceren: spreken, schrijven en lezen zonder harakat.
 - **Spraakherkenning** werkt in Chrome, Edge en Safari, niet in Firefox. De browser stuurt audio naar zijn eigen dienst (Google/Apple).
 - **Voorlezen** gebruikt de stem van je apparaat. Zonder Arabische stem kan de uitspraak onjuist zijn; de app waarschuwt dan.
 - **Schrijfbord** vergelijkt de vorm van je letter met de voorbeeldletter. Het herkent geen handschrift en beoordeelt de volgorde van de streken niet.
+- **Inhoud B2/C1**: langere teksten staan bewust zonder harakat (zoals in kranten). De Arabische inhoud is zorgvuldig geschreven en automatisch gecontroleerd op harakat-regels, maar nog niet door een docent nagekeken.
 - **AI-antwoorden** worden nooit automatisch lesstof. Woorden uit AI-gesprekken komen als "niet gecontroleerd" in je woordenboek; pas na jouw bevestiging worden het flashcards.
 
 ## Snel starten
@@ -72,12 +81,12 @@ De API-sleutel wordt alleen in `src/app/api/ai/route.ts` gebruikt en nooit naar 
 
 ```bash
 npm run typecheck   # TypeScript
-npm test            # 35 unittests: lesinhoud, harakat-regels, antwoordcontrole, planner, FSRS, opslag
+npm test            # 40+ unittests: lesinhoud, harakat-regels, antwoordcontrole, planner, FSRS, opslag
 npm run build && npm start   # in een tweede terminal:
 npm run test:e2e    # Chromium: alle pagina's (mobiel + desktop) en een echte oefenflow
 ```
 
-De inhoudstests controleren o.a.: 30 lessen, geldige antwoorden, unieke ids, minimaal 40% productieve oefeningen per les,
+De inhoudstests controleren o.a.: doorlopende les-ids (70), niveautoetsen per niveau, de vereiste grammaticaonderwerpen, geldige antwoorden, unieke ids, minimaal 40% productieve oefeningen per les,
 harakat-regels (geen dubbele klinkers, tanween -an met alif, tanween alleen aan het eind) en een glos voor elk woord in de leesteksten.
 
 ## Kosten
@@ -99,7 +108,7 @@ Correcties en beoordelingen worden op de server gecachet.
 src/
   app/                 pagina's (Next.js App Router) + api/ai (server-side Claude)
   components/          UI (shadcn-stijl), Arabische tekst, toetsenbord, schrijfbord, oefeningen
-  content/             lessen, letters, leesteksten, instaptoets, scenario's (getypeerde data)
+  content/             lessen (per niveau), letters, leesteksten (passages.ts, texts.ts), instaptoets, scenario's
   lib/
     arabic.ts          harakat, normalisatie, antwoordcontrole (hamza/ة/ى apart herkend)
     store.ts           alle leerdata (Zustand, lokaal opgeslagen)
@@ -116,9 +125,16 @@ Lesinhoud staat als getypeerde TypeScript-data in `src/content`. Een nieuwe les 
 
 Gebruikte techniek: Next.js 15, TypeScript, Tailwind CSS 4, eigen componenten in shadcn/ui-stijl (geen CLI-generatie), Zustand, ts-fsrs, Supabase, Anthropic SDK.
 
-## Volgende fases
+## Ontwikkelfases
 
-- **Fase 3**: A1-verdieping (werkwoorden tegenwoordige tijd, meervouden, idafa, getallen tot 100).
-- **Fase 4**: optioneel betere spraak (Whisper-STT voor Firefox, neurale TTS-stem).
-- **Fase 5**: A2 → C1 inhoud, langere teksten, nieuwsartikelen.
-- **Fase 6/7**: inhoudscontrole door een docent, toegankelijkheid, publicatie.
+| Fase | Status |
+|---|---|
+| 1. Architectuur en ontwerp | ✅ |
+| 2. Werkende beginnersomgeving (30 lessen, dashboard, planner) | ✅ |
+| 3. Uitgebreide vaardigheden (lezen, schrijven, luisteren, grammatica, woordenschat) | ✅ |
+| 4. AI-spreektrainer + spraak (opnemen, handsfree) | ✅ (AI vereist API-sleutel) |
+| 5. Curriculum A2 → C1 | ✅ 70 lessen |
+| 6. Optimalisatie en testen | ✅ unit- en browsertests, CI |
+| 7. Publicatie | ✅ klaar voor Vercel + Supabase (zie hierboven) |
+
+Mogelijke uitbreidingen: dialectmodules, meer authentieke teksten per niveau, neurale TTS-stem en Whisper-STT (betaald, optioneel), inhoudscontrole door een docent.

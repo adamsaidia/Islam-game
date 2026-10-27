@@ -59,7 +59,8 @@ function arabicStrings(e: Exercise): string[] {
 
 describe("lessen", () => {
   it("er zijn precies 30 lessen met ids 1..30", () => {
-    expect(LESSONS.map((l) => l.id)).toEqual(Array.from({ length: 30 }, (_, i) => i + 1));
+    expect(LESSONS.map((l) => l.id)).toEqual(Array.from({ length: LESSONS.length }, (_, i) => i + 1));
+    expect(LESSONS.length).toBeGreaterThanOrEqual(30);
   });
 
   it("elke les heeft leerdoel, uitleg, oefeningen en een toets", () => {
@@ -89,7 +90,7 @@ describe("lessen", () => {
         if (e.kind === "type") {
           expect(e.answers.length, tag).toBeGreaterThan(0);
           for (const a of e.answers) expect(hasArabic(a) || !!e.dutch, tag).toBe(true);
-          if (e.requireHarakat) expect(HARAKAT_RE.test(e.answers[0]), tag).toBe(true);
+          if (e.requireHarakat || e.checkEnding) expect(HARAKAT_RE.test(e.answers[0]), tag).toBe(true);
           HARAKAT_RE.lastIndex = 0;
         }
         if (e.kind === "order") expect(e.tokens.length, tag).toBeGreaterThanOrEqual(2);
@@ -120,7 +121,19 @@ describe("lessen", () => {
   it("antwoorden zonder harakat-eis bevatten geen harakat (worden toch genegeerd)", () => {
     for (const l of LESSONS)
       for (const e of [...l.exercises, ...l.test])
-        if (e.kind === "type" && !e.requireHarakat && !e.audio) for (const a of e.answers) expect(stripHarakat(a), e.id).toBe(a);
+        if (e.kind === "type" && !e.requireHarakat && !e.checkEnding && !e.audio) for (const a of e.answers) expect(stripHarakat(a), e.id).toBe(a);
+  });
+});
+
+describe("curriculum", () => {
+  it("dekt A0 t/m C1 met een niveautoets per niveau", () => {
+    for (const lv of ["A0", "A1", "A2", "B1", "B2", "C1"]) expect(LESSONS.some((l) => l.level === lv), lv).toBe(true);
+    for (const id of [40, 50, 58, 64, 70]) expect(LESSONS.find((l) => l.id === id)?.title).toMatch(/^Niveautoets/);
+  });
+  it("de grammaticaonderwerpen uit de opdracht komen aan bod", () => {
+    const titles = LESSONS.map((l) => l.title + " " + l.titleAr).join(" | ");
+    for (const t of ["tegenwoordige tijd", "verleden tijd", "Ontkenning", "Meervouden", "Idafa", "gebiedende wijs", "tweevoud", "Betrekkelijke", "Woordwortels", "Werkwoordsvormen", "i'rab", "lijdende vorm", "Voorwaardelijke"])
+      expect(titles.toLowerCase(), t).toContain(t.toLowerCase());
   });
 });
 

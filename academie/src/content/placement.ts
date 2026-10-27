@@ -103,6 +103,21 @@ export const PLACEMENT: PlacementSection[] = [
     ],
   },
   {
+    key: "a1plus",
+    title: "Werkwoorden en zinsbouw (A1+)",
+    skill: "grammar",
+    intro: "Voor wie al verder is: werkwoordvervoeging, ontkenning, meervoud en idafa.",
+    lessons: [31, 32, 33, 34, 35, 36, 37, 38, 39],
+    items: [
+      type("grammar", "Vervoeg يَكْتُبُ voor نَحْنُ.", ["نكتب"]),
+      type("grammar", "Vervoeg ذَهَبَ (verleden tijd) voor أَنَا.", ["ذهبت"]),
+      mcq("grammar", "Welke vorm is correct na لَمْ?", ["لَمْ يَذْهَبْ", "لَمْ يَذْهَبُ", "لَمْ ذَهَبَ"], 0),
+      type("grammar", "Meervoud van بَيْت:", ["بيوت"]),
+      mcq("grammar", "Wat betekent سَيَّارَةُ أَبِي?", ["de auto van mijn vader", "mijn vader rijdt auto", "een auto voor vader"], 0),
+      type("writing", "Vertaal: Ik ben geen student. (m)", ["لست طالبا"]),
+    ],
+  },
+  {
     key: "listening",
     title: "Luisteren",
     skill: "listening",

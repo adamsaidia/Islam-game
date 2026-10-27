@@ -12,8 +12,12 @@ export function builder(lessonId: number) {
       kind: "mcq", id: id(phase), skill, prompt, options, answer, ...x,
     }),
     /** Arabisch typen. Eerste antwoord wordt als modelantwoord getoond. */
-    type: (skill: Skill, prompt: string, answers: string[], x: Extra & { requireHarakat?: boolean; hint?: string } = {}): Exercise => ({
+    type: (skill: Skill, prompt: string, answers: string[], x: Extra & { requireHarakat?: boolean; checkEnding?: boolean; hint?: string } = {}): Exercise => ({
       kind: "type", id: id(phase), skill, prompt, answers, ...x,
+    }),
+    /** Antwoord in het Nederlands (bijv. betekenis van een woord). */
+    nl: (skill: Skill, prompt: string, answers: string[], x: Extra = {}): Exercise => ({
+      kind: "type", id: id(phase), skill, prompt, answers, dutch: true, ...x,
     }),
     /** Dictee: luister en typ. */
     dictation: (text: string, x: Extra & { requireHarakat?: boolean; answers?: string[] } = {}): Exercise => ({

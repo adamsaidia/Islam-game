@@ -1,5 +1,16 @@
 // Leesteksten in vijf fasen: van volledige harakat naar zelfstandig lezen zonder.
 import { CAFE_DIALOGUE, MEETING_DIALOGUE, FINAL_TEXT } from "./lessons/communication";
+import { AI_DEBATE, ARABIC_LANGUAGE, CITY_VILLAGE, HOMEWORK, MOROCCO_TRIP, MY_DAY, NEWS, SALMA_WORK, STUDY_ABSTRACT, YUSUF_STORY, type Passage } from "./passages";
+
+const fromPassage = (p: Passage, stage: ReadingStage, minLesson: number, questions: ReadingText["questions"]): ReadingText => ({
+  id: p.id,
+  title: p.title,
+  stage,
+  minLesson,
+  sentences: p.sentences,
+  gloss: p.gloss,
+  questions,
+});
 
 export type ReadingStage = 1 | 2 | 3 | 4 | 5;
 
@@ -222,4 +233,46 @@ export const TEXTS: ReadingText[] = [
       { q: "Wat wil Adam in de zomer doen?", options: ["Yusuf bezoeken in Marokko.", "Naar Amsterdam verhuizen.", "Een boek schrijven."], answer: 0 },
     ],
   },
+  fromPassage(MY_DAY, 2, 39, [
+    { q: "Hoe gaat de schrijver naar zijn werk?", options: ["Met de fiets.", "Met de bus.", "Met de auto."], answer: 0 },
+    { q: "Hoe laat gaat hij slapen?", options: ["Om elf uur.", "Om tien uur.", "Om twaalf uur."], answer: 0 },
+  ]),
+  fromPassage(MOROCCO_TRIP, 3, 50, [
+    { q: "Met wie reisde de schrijver?", options: ["Met zijn familie.", "Alleen.", "Met collega's."], answer: 0 },
+    { q: "Wat aten ze?", options: ["Tajine.", "Couscous.", "Vis."], answer: 0 },
+    { q: "Wat doen ze volgend jaar?", options: ["Rabat en Tanger bezoeken.", "Naar Egypte gaan.", "Thuisblijven."], answer: 0 },
+  ]),
+  fromPassage(YUSUF_STORY, 3, 58, [
+    { q: "Wat deed Yusuf elke ochtend?", options: ["Naar het nieuws luisteren.", "Sporten.", "Naar de universiteit gaan."], answer: 0 },
+    { q: "Wat is hij nu van beroep?", options: ["Tolk.", "Leraar.", "Journalist."], answer: 0 },
+  ]),
+  fromPassage(SALMA_WORK, 4, 56, [
+    { q: "Wat is Salma van beroep?", options: ["Ingenieur.", "Arts.", "Lerares."], answer: 0 },
+    { q: "Hoe is haar salaris?", options: ["Goed.", "Laag.", "Dat staat er niet."], answer: 0 },
+  ]),
+  fromPassage(NEWS, 4, 57, [
+    { q: "Hoeveel woningen wil de regering bouwen?", options: ["Honderdduizend.", "Tienduizend.", "Een miljoen."], answer: 0 },
+    { q: "Hoe wordt het weer in het weekend?", options: ["Regenachtig.", "Zonnig.", "Koud en droog."], answer: 0 },
+  ]),
+  fromPassage(HOMEWORK, 5, 62, [
+    { q: "Wat is volgens de schrijver het voordeel van thuiswerken?", options: ["Je bespaart reistijd.", "Je verdient meer.", "Je ziet collega's vaker."], answer: 0 },
+    { q: "Wat raadt hij aan?", options: ["Twee of drie dagen per week thuiswerken.", "Altijd thuiswerken.", "Nooit thuiswerken."], answer: 0 },
+  ]),
+  fromPassage(CITY_VILLAGE, 5, 64, [
+    { q: "Waarom verhuizen jongeren naar de stad?", options: ["Voor werk en onderwijs.", "Voor de rust.", "Omdat het goedkoop is."], answer: 0 },
+    { q: "Wat zou jongeren in het dorp houden?", options: ["Investeringen in infrastructuur.", "Lagere huren in de stad.", "Minder scholen."], answer: 0 },
+  ]),
+  fromPassage(STUDY_ABSTRACT, 5, 65, [
+    { q: "Waar gaat het onderzoek over?", options: ["Sociale media en taalleren.", "Gezondheid van studenten.", "Universitaire kosten."], answer: 0 },
+    { q: "Welke vaardigheid verbetert?", options: ["Luisteren.", "Schrijven.", "Spreken."], answer: 0 },
+  ]),
+  fromPassage(AI_DEBATE, 5, 68, [
+    { q: "Wat denken sommige experts?", options: ["AI schept nieuwe banen.", "AI verdwijnt snel.", "AI is verboden."], answer: 0 },
+    { q: "Wat willen velen?", options: ["Wetten voor privacy en verantwoord gebruik.", "Minder technologie op school.", "Hogere salarissen."], answer: 0 },
+  ]),
+  fromPassage(ARABIC_LANGUAGE, 5, 69, [
+    { q: "In hoeveel landen is Arabisch een officiële taal?", options: ["In meer dan twintig.", "In vijf.", "In honderd."], answer: 0 },
+    { q: "Wat is de grootste uitdaging voor leerders?", options: ["Lezen zonder klinkertekens.", "Het alfabet.", "De dialecten verstaan."], answer: 0 },
+    { q: "Wat helpt volgens de tekst?", options: ["Regelmatig oefenen.", "Alleen dialect leren.", "Niet lezen."], answer: 0 },
+  ]),
 ];

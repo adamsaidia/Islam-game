@@ -165,7 +165,7 @@ export default function Dashboard() {
               </LinkButton>
             </div>
           ) : (
-            <p className="text-sm">Je hebt alle 30 beginnerslessen behaald. Nieuwe niveaus zijn in ontwikkeling; ga intussen verder met lezen, schrijven en spreken.</p>
+            <p className="text-sm">Je hebt alle lessen behaald. Ga verder met lezen zonder harakat, vrij schrijven en gesprekken met de AI-docent.</p>
           )}
           <div className="mt-5 border-t border-line pt-4 text-sm">
             <p className="font-medium">{level.level}</p>
@@ -282,6 +282,23 @@ export default function Dashboard() {
           ) : (
             <p className="text-sm text-muted">Nog geen toetsen gemaakt.</p>
           )}
+          {(() => {
+            const last = s.tests.find((t) => t.title === "Voortgangstoets");
+            const days = last ? (Date.now() - new Date(last.date).getTime()) / 864e5 : Infinity;
+            const studied = Object.values(s.lessons).filter((l) => l.status !== "new").length;
+            return studied >= 2 && days >= 7 ? (
+              <div className="mt-3 flex items-center justify-between gap-2 rounded-xl bg-gold-soft px-3 py-2 text-sm">
+                <span>{last ? "Tijd voor je wekelijkse voortgangstoets." : "Maak je eerste voortgangstoets."}</span>
+                <LinkButton href="/toetsen" size="sm" variant="gold">
+                  Start
+                </LinkButton>
+              </div>
+            ) : (
+              <LinkButton href="/toetsen" size="sm" variant="ghost" className="mt-2">
+                Alle toetsen →
+              </LinkButton>
+            );
+          })()}
         </Card>
         <Goals />
       </div>

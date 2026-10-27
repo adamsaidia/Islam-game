@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { ArrowRight, CheckCircle2, ClipboardCheck } from "lucide-react";
 import { PLACEMENT } from "@/content/placement";
-import { getLesson } from "@/content/lessons";
+import { getLesson, LESSONS } from "@/content/lessons";
 import { SKILL_LABELS, type Skill } from "@/content/types";
 import { useStore, PASS_MARK } from "@/lib/store";
 import { sttSupported } from "@/lib/speech";
@@ -36,9 +36,9 @@ export default function PlacementPage() {
     const skills: Partial<Record<Skill, number>> = {};
     for (const [k, v] of Object.entries(skillAgg)) skills[k as Skill] = v!.c / v!.n;
     const testedOut = sections.filter((s) => sectionScores[s.key] >= PASS_MARK && (all[s.key] ?? []).some((r) => r.result)).flatMap((s) => s.lessons);
-    // Luisteren/spreken (les 28–29) alleen overslaan als ook de grammatica beheerst wordt.
+    // Luisteren/spreken (les 28–29) en A1+ alleen overslaan als ook de basisgrammatica beheerst wordt.
     const safe = testedOut.filter((id) => id < 28 || sectionScores.grammar >= PASS_MARK);
-    const startLesson = Array.from({ length: 30 }, (_, i) => i + 1).find((id) => !safe.includes(id)) ?? 30;
+    const startLesson = LESSONS.map((l) => l.id).find((id) => !safe.includes(id)) ?? LESSONS[LESSONS.length - 1].id;
     savePlacement({ date: new Date().toISOString(), skills, sections: sectionScores, startLesson }, safe);
     setPhase({ kind: "done" });
   };
@@ -46,7 +46,7 @@ export default function PlacementPage() {
   if (phase.kind === "start") {
     return (
       <div className="mx-auto max-w-2xl">
-        <PageHeader title="Instaptoets" subtitle="Ongeveer 15 minuten · 8 onderdelen · je resultaten bepalen je startpunt" />
+        <PageHeader title="Instaptoets" subtitle="Ongeveer 20 minuten · 9 onderdelen · je resultaten bepalen je startpunt" />
         <Card className="space-y-4">
           <p className="text-sm leading-relaxed">
             Je kent het Arabische alfabet al grotendeels, maar het is weggezakt. Deze toets meet elke vaardigheid apart: letters, lezen met en zonder harakat, spelling, woordenschat,

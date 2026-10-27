@@ -25,21 +25,50 @@ export function useArabicVoices() {
   return { voices, supported };
 }
 
+/** Knipt tekst op in zinnen; lange uitingen breken in sommige browsers halverwege af. */
+export function chunkText(text: string, max = 180): string[] {
+  const parts = text.split(/(?<=[.!?؟،؛\n])\s+/).map((p) => p.trim()).filter(Boolean);
+  const out: string[] = [];
+  for (const p of parts) {
+    if (p.length <= max) {
+      out.push(p);
+      continue;
+    }
+    let cur = "";
+    for (const word of p.split(/\s+/)) {
+      if ((cur + " " + word).trim().length > max) {
+        if (cur) out.push(cur);
+        cur = word;
+      } else cur = (cur + " " + word).trim();
+    }
+    if (cur) out.push(cur);
+  }
+  return out.length ? out : [text];
+}
+
+let speakToken = 0;
+
 export function speak(text: string, opts: { rate?: number; voiceURI?: string; onEnd?: () => void } = {}) {
   if (typeof window === "undefined" || !("speechSynthesis" in window)) return false;
   const synth = window.speechSynthesis;
   synth.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "ar-SA";
-  u.rate = opts.rate ?? 0.85;
+  const token = ++speakToken;
   const voices = getArabicVoices();
   const voice = voices.find((v) => v.voiceURI === opts.voiceURI) ?? voices[0];
-  if (voice) {
-    u.voice = voice;
-    u.lang = voice.lang;
-  }
-  if (opts.onEnd) u.onend = opts.onEnd;
-  synth.speak(u);
+  const chunks = chunkText(text);
+  chunks.forEach((chunk, i) => {
+    const u = new SpeechSynthesisUtterance(chunk);
+    u.lang = voice?.lang ?? "ar-SA";
+    u.rate = opts.rate ?? 0.85;
+    if (voice) u.voice = voice;
+    if (i === chunks.length - 1 && opts.onEnd) {
+      u.onend = () => token === speakToken && opts.onEnd?.();
+      u.onerror = () => token === speakToken && opts.onEnd?.();
+    }
+    synth.speak(u);
+  });
+  // Chrome kan soms 'gepauzeerd' blijven hangen.
+  if (synth.paused) synth.resume();
   return true;
 }
 
@@ -140,4 +169,55 @@ export function useSpeechRecognition(lang = "ar-SA") {
   useEffect(() => () => rec.current?.abort(), []);
 
   return { supported, listening, transcript, interim, confidence, error, start, stop, setTranscript };
+}
+
+// --- Opnemen en terugluisteren -------------------------------------------------
+
+/** Neemt je eigen stem op (blijft in je browser; wordt nergens heen gestuurd). */
+export function useRecorder() {
+  const [supported, setSupported] = useState(false);
+  const [recording, setRecording] = useState(false);
+  const [url, setUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const rec = useRef<MediaRecorder | null>(null);
+  const chunks = useRef<Blob[]>([]);
+
+  useEffect(() => {
+    setSupported(typeof window !== "undefined" && "MediaRecorder" in window && !!navigator.mediaDevices?.getUserMedia);
+  }, []);
+  useEffect(() => () => {
+    if (url) URL.revokeObjectURL(url);
+  }, [url]);
+
+  const start = useCallback(async () => {
+    setError(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const r = new MediaRecorder(stream);
+      chunks.current = [];
+      r.ondataavailable = (e) => e.data.size && chunks.current.push(e.data);
+      r.onstop = () => {
+        stream.getTracks().forEach((t) => t.stop());
+        const blob = new Blob(chunks.current, { type: r.mimeType || "audio/webm" });
+        setUrl((old) => {
+          if (old) URL.revokeObjectURL(old);
+          return URL.createObjectURL(blob);
+        });
+        setRecording(false);
+      };
+      rec.current = r;
+      r.start();
+      setRecording(true);
+      setTimeout(() => r.state === "recording" && r.stop(), 20000);
+    } catch {
+      setError("Geen toegang tot de microfoon.");
+      setRecording(false);
+    }
+  }, []);
+
+  const stop = useCallback(() => {
+    if (rec.current?.state === "recording") rec.current.stop();
+  }, []);
+
+  return { supported, recording, url, error, start, stop };
 }

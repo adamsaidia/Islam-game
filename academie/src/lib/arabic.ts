@@ -230,3 +230,28 @@ export function letterForm(letter: string, pos: "isolated" | "initial" | "medial
 
 /** Letters die niet aan de volgende letter vastgeschreven worden. */
 export const NON_CONNECTORS = new Set(["ا", "أ", "إ", "آ", "د", "ذ", "ر", "ز", "و", "ؤ", "ة", "ى"]);
+
+/** Laatste klinkerteken van een woord (de naamvalsuitgang), of "" als er geen is. */
+export function finalMark(s: string): string {
+  const chars = Array.from(normalizeBasic(s));
+  let i = chars.length - 1;
+  const marks: string[] = [];
+  while (i >= 0 && /[\u064B-\u0652]/.test(chars[i])) marks.unshift(chars[i--]);
+  return marks.filter((m) => m !== SHADDA).join("");
+}
+
+/** Controle voor naamvalsoefeningen: letters moeten kloppen en de laatste klinker ook. */
+export function checkEnding(input: string, answer: string): CheckResult {
+  const base = checkArabic(input, [answer]);
+  if (!base.correct) return base;
+  const want = finalMark(answer);
+  const got = finalMark(input);
+  if (got === want) return { correct: true, verdict: "correct", message: "Goed, de naamvalsuitgang klopt!", expected: answer };
+  const name: Record<string, string> = { "\u064E": "fatha (-a)", "\u064F": "damma (-u)", "\u0650": "kasra (-i)", "\u064B": "-an", "\u064C": "-un", "\u064D": "-in", "\u0652": "sukun" };
+  return {
+    correct: false,
+    verdict: "almost",
+    message: got ? `De letters kloppen, maar de uitgang moet ${name[want] ?? want} zijn, niet ${name[got] ?? got}.` : `Zet de naamvalsuitgang erop: ${name[want] ?? want}.`,
+    expected: answer,
+  };
+}

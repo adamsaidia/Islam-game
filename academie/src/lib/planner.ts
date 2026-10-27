@@ -123,16 +123,32 @@ export function nextLessonId(state: Pick<AppState, "lessons">): number | null {
   return null;
 }
 
-/** Eerlijke niveau-inschatting: alleen op basis van behaalde lestoetsen. */
-export function levelEstimate(state: Pick<AppState, "lessons">): { level: string; detail: string } {
+const LEVEL_ORDER = ["A0", "A1", "A2", "B1", "B2", "C1"] as const;
+
+/**
+ * Eerlijke niveau-inschatting: alleen op basis van behaalde lestoetsen (of via de instaptoets
+ * overgeslagen lessen). Een niveau is afgerond als alle lessen van dat niveau behaald zijn.
+ */
+export function levelEstimate(state: Pick<AppState, "lessons">): { level: string; detail: string; reached: string | null; working: string } {
   const done = (id: number) => {
     const s = state.lessons[id]?.status;
     return s === "completed" || s === "tested_out";
   };
   const count = LESSONS.filter((l) => done(l.id)).length;
-  const a0 = LESSONS.filter((l) => l.level === "A0").every((l) => done(l.id));
-  const a1 = LESSONS.filter((l) => l.level === "A1").every((l) => done(l.id));
-  if (a1 && a0) return { level: "A1 (basis)", detail: "Beginnersdeel afgerond. A1-verdieping en A2 zijn in ontwikkeling." };
-  if (a0) return { level: "A0 afgerond → A1", detail: `${count}/30 lessen behaald. Je werkt aan A1.` };
-  return { level: "A0", detail: `${count}/30 lessen behaald. Je herstelt de basis.` };
+  let reached: string | null = null;
+  for (const lv of LEVEL_ORDER) {
+    const ls = LESSONS.filter((l) => l.level === lv);
+    if (ls.length && ls.every((l) => done(l.id))) reached = lv;
+    else break;
+  }
+  const idx = reached ? LEVEL_ORDER.indexOf(reached as (typeof LEVEL_ORDER)[number]) : -1;
+  const working = LEVEL_ORDER[Math.min(idx + 1, LEVEL_ORDER.length - 1)];
+  const total = LESSONS.length;
+  if (reached === "C1") return { level: "C1", detail: `Alle ${total} lessen behaald. Blijf dagelijks lezen, schrijven en spreken.`, reached, working: "C1" };
+  return {
+    level: reached ? `${reached} afgerond → ${working}` : working,
+    detail: `${count}/${total} lessen behaald.${reached ? ` Afgerond niveau: ${reached}.` : ""} Je werkt aan ${working}.`,
+    reached,
+    working,
+  };
 }
