@@ -1,5 +1,6 @@
 import 'server-only';
 import { sql } from './db';
+import { env } from './env';
 import { DEFAULT_SETTINGS, type Settings } from './settings-defaults';
 
 function isObj(v: unknown): v is Record<string, unknown> {
@@ -16,6 +17,7 @@ export function deepMerge<T>(base: T, override: unknown): T {
 }
 
 export async function getSettings(): Promise<Settings> {
+  if (!env.dbConfigured) return DEFAULT_SETTINGS;
   const rows = await sql<{ key: string; value: unknown }[]>`select key, value from settings`;
   let s: Settings = DEFAULT_SETTINGS;
   for (const r of rows) {

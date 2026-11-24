@@ -15,6 +15,7 @@ export function getPaymentProvider(name?: string): PaymentProvider {
 }
 
 export function paymentsConfigured(): boolean {
+  if (!env.dbConfigured) return false;
   try {
     return env.paymentProvider === 'mock' || !!env.mollieApiKey;
   } catch {

@@ -1,5 +1,6 @@
 import 'server-only';
 import { sql } from './db';
+import { env } from './env';
 import type { EventRow } from './events';
 
 export type OrderRow = {
@@ -57,6 +58,7 @@ export type FullOrder = {
 };
 
 async function load(where: 'id' | 'token', value: string): Promise<FullOrder | null> {
+  if (!env.dbConfigured) return null;
   const [order] =
     where === 'id'
       ? await sql<OrderRow[]>`select * from orders where id = ${value}`

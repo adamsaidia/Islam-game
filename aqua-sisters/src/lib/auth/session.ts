@@ -43,6 +43,7 @@ export async function destroySession() {
 }
 
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
+  if (!env.dbConfigured) return null;
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   if (!token || token.length > 100) return null;

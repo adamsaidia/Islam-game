@@ -93,9 +93,10 @@ export default async function ReservePage({ params }: Props) {
                 holdMinutes={event.hold_minutes}
               />
             ) : (
-              <p className="border-l-2 border-warn bg-white p-5 text-sm">
-                Online betalen is nog niet geconfigureerd. Probeer het later opnieuw.
-              </p>
+              <div className="border-l-2 border-gold bg-white p-6" data-testid="sales-soon">
+                <p className="display text-3xl text-deep">Ticketverkoop start binnenkort</p>
+                <p className="mt-2 text-sm text-muted">Houd onze Instagram en TikTok in de gaten – je kunt hier binnenkort direct je tickets reserveren.</p>
+              </div>
             )
           ) : (
             <div id="wachtlijst" className="scroll-mt-6">

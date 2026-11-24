@@ -11,7 +11,12 @@ export const env = {
     return required('DATABASE_URL');
   },
   get appUrl() {
-    return (process.env.APP_URL || 'http://localhost:3000').replace(/\/$/, '');
+    const vercel = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+    return (process.env.APP_URL || (vercel ? `https://${vercel}` : 'http://localhost:3000')).replace(/\/$/, '');
+  },
+  /** false zolang er nog geen database is gekoppeld (site draait dan in 'binnenkort'-modus). */
+  get dbConfigured() {
+    return !!process.env.DATABASE_URL;
   },
   get paymentProvider(): 'mollie' | 'mock' {
     const p = process.env.PAYMENT_PROVIDER || 'mollie';

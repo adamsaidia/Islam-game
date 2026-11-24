@@ -1,5 +1,7 @@
 import 'server-only';
 import { sql } from './db';
+import { env } from './env';
+import { FALLBACK_EVENT, FALLBACK_TICKET_TYPES } from './fallback-event';
 
 export type EventRow = {
   id: string;
@@ -47,27 +49,35 @@ export type TicketTypeRow = {
 export type SaleState = 'on_sale' | 'sold_out' | 'paused' | 'not_started' | 'closed' | 'unavailable';
 
 export async function getEventBySlug(slug: string) {
+  if (!env.dbConfigured) return slug === FALLBACK_EVENT.slug ? FALLBACK_EVENT : null;
   const [e] = await sql<EventRow[]>`select * from events where slug = ${slug}`;
   return e ?? null;
 }
 
 export async function getEventById(id: string) {
+  if (!env.dbConfigured) return id === FALLBACK_EVENT.id ? FALLBACK_EVENT : null;
   const [e] = await sql<EventRow[]>`select * from events where id = ${id}`;
   return e ?? null;
 }
 
 /** Gepubliceerde evenementen die nog niet voorbij zijn, eerstvolgende eerst. */
 export async function listUpcomingEvents() {
+  if (!env.dbConfigured) return FALLBACK_EVENT.ends_at > new Date() ? [FALLBACK_EVENT] : [];
   return sql<EventRow[]>`select * from events where status = 'published' and ends_at > now() order by starts_at`;
 }
 
 export async function getTicketTypes(eventId: string, onlyActive = true) {
+  if (!env.dbConfigured) return eventId === FALLBACK_EVENT.id ? FALLBACK_TICKET_TYPES : [];
   return sql<TicketTypeRow[]>`
     select * from ticket_types where event_id = ${eventId} ${onlyActive ? sql`and is_active` : sql``}
     order by sort_order, price_cents desc`;
 }
 
 export async function getAvailability(eventId: string) {
+  if (!env.dbConfigured) {
+    const cap = eventId === FALLBACK_EVENT.id ? FALLBACK_EVENT.capacity : 0;
+    return { capacity: cap, used: 0, sold: 0, checked_in: 0, remaining: cap };
+  }
   const [r] = await sql<{ capacity: number; used: number; sold: number; checked_in: number }[]>`
     select e.capacity,
            event_persons_used(e.id) as used,
@@ -79,6 +89,7 @@ export async function getAvailability(eventId: string) {
 }
 
 export async function getTicketTypeRemaining(eventId: string) {
+  if (!env.dbConfigured) return {} as Record<string, number | null>;
   const rows = await sql<{ id: string; remaining: number | null }[]>`
     select id, case when capacity is null then null else greatest(capacity - ticket_type_units_used(id), 0) end as remaining
     from ticket_types where event_id = ${eventId}`;

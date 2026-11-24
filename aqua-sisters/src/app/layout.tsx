@@ -3,7 +3,8 @@ import '@fontsource-variable/cormorant-garamond';
 import '@fontsource-variable/inter';
 import './globals.css';
 
-const appUrl = process.env.APP_URL || 'http://localhost:3000';
+const vercelUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL;
+const appUrl = process.env.APP_URL || (vercelUrl ? `https://${vercelUrl}` : 'http://localhost:3000');
 
 export const metadata: Metadata = {
   metadataBase: new URL(appUrl),

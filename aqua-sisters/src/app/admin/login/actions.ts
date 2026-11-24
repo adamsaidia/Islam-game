@@ -19,6 +19,7 @@ function safeNext(n: FormDataEntryValue | null, fallback: string) {
 }
 
 export async function loginAction(_prev: LoginState, form: FormData): Promise<LoginState> {
+  if (!env.dbConfigured) return { error: 'De database is nog niet gekoppeld. Inloggen kan zodra Supabase is ingesteld.' };
   const email = String(form.get('email') || '').trim().toLowerCase().slice(0, 200);
   const password = String(form.get('password') || '').slice(0, 200);
   const ip = await clientIp();

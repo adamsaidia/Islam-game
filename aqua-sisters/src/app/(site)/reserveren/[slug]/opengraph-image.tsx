@@ -37,19 +37,19 @@ export default async function OgImage({ params }: { params: Promise<{ slug: stri
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '64px 72px', width: '100%' }}>
           <div style={{ display: 'flex', fontSize: 30, letterSpacing: 10 }}>AQUA SISTERS</div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontSize: 26, letterSpacing: 6, color: '#C8A96A', textTransform: 'uppercase' }}>{event?.title ?? 'Exclusief vrouwenzwemmen'}</div>
-            <div style={{ fontSize: 88, lineHeight: 1, marginTop: 16, fontStyle: 'italic', fontFamily: 'CormorantItalic' }}>
+            <div style={{ display: 'flex', fontSize: 26, letterSpacing: 6, color: '#C8A96A', textTransform: 'uppercase' }}>{event?.title ?? 'Exclusief vrouwenzwemmen'}</div>
+            <div style={{ display: 'flex', fontSize: 88, lineHeight: 1, marginTop: 16, fontStyle: 'italic', fontFamily: 'CormorantItalic' }}>
               {event ? formatDate(event.starts_at) : 'Jouw moment in het water'}
             </div>
             {event && (
-              <div style={{ fontSize: 34, marginTop: 20, color: 'rgba(255,255,255,0.88)' }}>
-                {formatTimeRange(event.starts_at, event.ends_at)} · {event.venue_name}, {event.city}
+              <div style={{ display: 'flex', fontSize: 34, marginTop: 20, color: 'rgba(255,255,255,0.88)' }}>
+                {`${formatTimeRange(event.starts_at, event.ends_at)} · ${event.venue_name}, ${event.city}`}
               </div>
             )}
           </div>
           <div style={{ display: 'flex', gap: 40, fontSize: 30, color: 'rgba(255,255,255,0.9)' }}>
             {types.map((t) => (
-              <span key={t.id}>{t.name} {formatEuro(t.price_cents)}</span>
+              <span key={t.id}>{`${t.name} ${formatEuro(t.price_cents)}`}</span>
             ))}
             {event?.dress_code && <span style={{ color: '#C8A96A' }}>{event.dress_code}</span>}
           </div>
