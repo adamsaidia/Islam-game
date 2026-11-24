@@ -2,7 +2,9 @@ import 'server-only';
 import { sql } from './db';
 import type { Settings } from './settings-defaults';
 
-const SOLD = sql`('paid', 'partially_refunded', 'refunded', 'over_capacity')`;
+// Statussen die als verkocht tellen. Bewust een string (geen sql-fragment op moduleniveau),
+// zodat er tijdens de build geen databaseverbinding nodig is.
+const SOLD = ['paid', 'partially_refunded', 'refunded', 'over_capacity'];
 
 export function vatPortion(grossCents: number, settings: Settings): number {
   const r = settings.finance.vatEnabled ? settings.finance.vatRatePercent : null;
@@ -18,7 +20,7 @@ export async function getDashboard(eventId: string | null, settings: Settings) {
 
   const [[orders], [tickets], [cap], [exp], feeRows, refunds] = await Promise.all([
     sql<{ gross: number; refunded: number; paid_orders: number; open_orders: number; all_orders: number; free_orders: number }[]>`
-      select coalesce(sum(o.total_cents) filter (where o.status in ${SOLD}), 0)::int as gross,
+      select coalesce(sum(o.total_cents) filter (where o.status = any(${SOLD})), 0)::int as gross,
              coalesce(sum(o.refunded_cents), 0)::int as refunded,
              count(*) filter (where o.status in ('paid', 'partially_refunded'))::int as paid_orders,
              count(*) filter (where o.status in ('pending', 'awaiting_transfer') and o.reserved_until > now())::int as open_orders,
