@@ -13,7 +13,11 @@ declare global {
  */
 export function getSql(): postgres.Sql {
   if (!globalThis.__aquaSql) {
-    globalThis.__aquaSql = postgres(env.databaseUrl, {
+    const url = env.databaseUrl;
+    const local = /@(localhost|127\.0\.0\.1)(:|\/)/.test(url);
+    globalThis.__aquaSql = postgres(url, {
+      // Supabase vereist een versleutelde verbinding; lokaal niet.
+      ssl: local || /sslmode=disable/.test(url) ? false : 'require',
       max: Number(process.env.DATABASE_POOL_MAX || 5),
       prepare: false,
       idle_timeout: 20,
